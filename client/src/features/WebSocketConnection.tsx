@@ -47,7 +47,7 @@ const WebSocketConnection: React.FC = () => {
       <div className="text-green-400">
         <p>WebSocket Ready State: {ReadyState[readyState]}</p>
         <p>Subscribed Value: {subscribedValue}</p>
-        <button onClick={handleClick}>Send Message</button>
+        <button className="invisible" onClick={handleClick}>Send Message</button>
       </div>
     </div>
   );
