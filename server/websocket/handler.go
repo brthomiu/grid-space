@@ -28,8 +28,8 @@ var (
 			return true
 		},
 	}
-	ticker = time.NewTicker(1 * time.Second) // Ticker for generating new values every second
-	done   = make(chan struct{})             // Channel to signal the ticker goroutine to exit
+	ticker = time.NewTicker(10 * time.Second) // Ticker for generating new values every (n * seconds)
+	done   = make(chan struct{})              // Channel to signal the ticker goroutine to exit
 )
 
 // HandleWebSocketConnection upgrades HTTP connections to WebSocket and manages WebSocket connections.
@@ -85,14 +85,14 @@ func init() {
 	go broadcastMessages()
 }
 
-// broadcastMessages broadcasts new values to all clients every second.
+// broadcastMessages broadcasts new values to all clients every (n * seconds).
 func broadcastMessages() {
 	defer ticker.Stop()
 
 	for {
 		select {
 		case <-ticker.C:
-			// Generate a new value every second
+			// Generate a new value every (n * seconds)
 			newValue := Message{Value: generateNewValue()}
 
 			// Convert sync.Map to a regular map for iteration
