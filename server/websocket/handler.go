@@ -91,7 +91,7 @@ func HandleWebSocketConnection(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-var cyclingValues = []int{10, 11, 12, 11}
+var cyclingValues = []int{3, 4, 5, 6}
 var counter int
 var counterMutex sync.Mutex
 
