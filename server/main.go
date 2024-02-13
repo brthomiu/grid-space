@@ -5,13 +5,18 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"server/websocket"
 )
 
 func main() {
 	http.HandleFunc("/ws", websocket.HandleWebSocketConnection)
 
-	port := 8080
-	fmt.Printf("Server started on :%d\n", port)
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), nil))
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080" // Default port if not specified
+	}
+
+	fmt.Printf("Server started on :%s\n", port)
+	log.Fatal(http.ListenAndServe(":"+port, nil))
 }

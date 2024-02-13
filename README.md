@@ -1,6 +1,6 @@
 # GridSpace
 
-A grid-based browser game.
+A grid-based browser game. (The actual game part is still a WIP.)
 
 The game client is built with TypeScript and React.
 
