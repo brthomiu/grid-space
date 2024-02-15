@@ -4,6 +4,7 @@ package database
 import (
 	"database/sql"
 	"fmt"
+	"runtime"
 	"server/types"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -18,16 +19,9 @@ func OpenDatabase(dbName string) (*sql.DB, error) {
 	return db, nil
 }
 
-// CreateTilesTable creates the table for storing tile data. If it exists, it drops the table and creates a new one.
+// CreateTilesTable creates the table for storing tile data if it doesn't exist.
 func CreateTilesTable(db *sql.DB) error {
-	// Drop the table if it exists
-	_, err := db.Exec(`DROP TABLE IF EXISTS tiles;`)
-	if err != nil {
-		return fmt.Errorf("error dropping table: %v", err)
-	}
-
-	// Create the new table
-	_, err = db.Exec(`
+	_, err := db.Exec(`
 		CREATE TABLE IF NOT EXISTS tiles (
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
 			locationX INTEGER,
@@ -41,13 +35,12 @@ func CreateTilesTable(db *sql.DB) error {
 	if err != nil {
 		return fmt.Errorf("error creating table: %v", err)
 	}
-
 	return nil
 }
 
 // InsertTile inserts a single tile into the database.
-func InsertTile(db *sql.DB, tile types.Tile) error {
-	_, err := db.Exec(`
+func InsertTile(tx *sql.Tx, tile types.Tile) error {
+	_, err := tx.Exec(`
 		INSERT INTO tiles (
 			locationX, locationY,
 			resourceType, resourceQuantity, resourceQuality,
@@ -73,18 +66,38 @@ func SaveGridToDatabase(grid [][]types.Tile, dbName string) error {
 	}
 	defer db.Close()
 
-	// Create the table if it doesn't exist
+	// Drop the table if it exists
+	_, err = db.Exec(`DROP TABLE IF EXISTS tiles;`)
+	if err != nil {
+		return fmt.Errorf("error dropping table: %v", err)
+	}
+
+	// Create the table
 	if err := CreateTilesTable(db); err != nil {
 		return err
 	}
 
+	// Start a new transaction
+	tx, err := db.Begin()
+	if err != nil {
+		return err
+	}
+
 	// Insert each row into the database
-	for _, row := range grid {
-		for _, tile := range row {
-			if err := InsertTile(db, tile); err != nil {
+	for i := 0; i < len(grid); i++ {
+		for _, tile := range grid[i] {
+			if err := InsertTile(tx, tile); err != nil {
 				return err
 			}
 		}
+		// Free up the memory used by the row
+		grid[i] = nil
+		runtime.GC()
+	}
+
+	// Commit the transaction
+	if err := tx.Commit(); err != nil {
+		return err
 	}
 
 	fmt.Println("Grid saved to the database successfully.")

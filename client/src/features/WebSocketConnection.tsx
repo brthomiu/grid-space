@@ -20,8 +20,8 @@ const WebSocketConnection: React.FC<Props> = ({
   currentLocation,
   setCurrentLocation,
 }) => {
-  // const socketUrl = "ws://localhost:8080/ws";
-  const socketUrl = "wss://grid-server-live-d5aba022ae2f.herokuapp.com/ws";
+  const socketUrl = "ws://localhost:8080/ws";
+  // const socketUrl = "wss://grid-server-live-d5aba022ae2f.herokuapp.com/ws";
 
   const { lastMessage, readyState, sendMessage } = useWebSocket(socketUrl);
 

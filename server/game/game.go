@@ -24,7 +24,7 @@ func StartGameServer() {
 		gridSize, err := strconv.Atoi(gridSizeStr)
 		if err != nil {
 			// Use a default value if GRID_SIZE is not set or is not a valid integer
-			gridSize = 100
+			gridSize = 1000
 		}
 
 		// Validate the grid size
