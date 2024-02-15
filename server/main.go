@@ -6,11 +6,14 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"server/game"
 	"server/websocket"
 )
 
 func main() {
 	http.HandleFunc("/ws", websocket.HandleWebSocketConnection)
+
+	game.StartGameServer()
 
 	port := os.Getenv("PORT")
 	if port == "" {
