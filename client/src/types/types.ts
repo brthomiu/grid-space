@@ -3,8 +3,8 @@ export type Grid = {
 }
 
 export type Location = {
-  x: number;
-  y: number;
+  X: number;
+  Y: number;
 };
 
 export type UnitStats = {
@@ -16,19 +16,20 @@ export type UnitStats = {
 };
 
 export type Unit = {
+  id: string;
   type: string;
   name: string;
   stats: UnitStats;
 };
 
 export type Tile = {
-  location: Location;
-  resource: Resource;
-  occupied: boolean;
+  Location: Location;
+  Resource: Resource;
+  Occupied: boolean;
 };
 
 export type Resource = {
-  type: string;
-  quantity: number;
-  quality: number;
+  Type: string;
+  Quantity: number;
+  Quality: number;
 };

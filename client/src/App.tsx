@@ -1,9 +1,19 @@
+import { useState } from "react";
+import { Location } from "./types/types";
 import WebSocketConnection from "./features/WebSocketConnection";
 
 function App() {
+  const [currentLocation, setCurrentLocation] = useState<Location>({
+    X: 3,
+    Y: 3,
+  });
+
   return (
     <>
-    <WebSocketConnection />
+      <WebSocketConnection
+        currentLocation={currentLocation}
+        setCurrentLocation={setCurrentLocation}
+      />
     </>
   );
 }

@@ -1,33 +1,40 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Tile from "../tiles/Tile";
-import { Grid as GridType } from "../../types/types";
-import { generateGrid } from "../../features/grid";
+import { Tile as TTile, Location } from "../../types/types";
 import { config } from "../../config/config";
 
 type Props = {
-  grid: GridType;
+  grid: TTile[];
+  currentLocation: Location;
 };
 
 // Functional component representing a grid of tiles.
-const Grid: React.FC<Props> = ({ grid }) => {
-  // Extract the size from the grid configuration
-  const { size } = grid;
-
+const Grid: React.FC<Props> = ({ grid, currentLocation }) => {
   // Generate a grid of tiles based on the specified size
-  const tiles = generateGrid(size);
+  const tiles = grid;
+
+  useEffect(() => {
+    console.log(tiles);
+  }, [tiles]);
 
   // Render the grid component with CSS Grid layout
   return (
-    <div
-      className="grid"
-      style={{
-        gridTemplateColumns: `repeat(${size}, ${config.tileSize * 4}px)`,
-      }}
-    >
-      {/* Map through the generated tiles and render each Tile component */}
-      {tiles.map((tile) => (
-        <Tile key={`${tile.location.x}-${tile.location.y}`} tile={tile} />
-      ))}
+    <div>
+      <div
+        className="grid"
+        style={{
+          gridTemplateColumns: `repeat(${7}, ${config.tileSize * 4}px)`,
+        }}
+      >
+        {/* Map through the generated tiles and render each Tile component */}
+        {tiles.map((tile) => (
+          <Tile
+            currentLocation={currentLocation}
+            key={`${tile.Location.X}-${tile.Location.Y}`}
+            tile={tile}
+          />
+        ))}
+      </div>
     </div>
   );
 };
