@@ -1,31 +1,3 @@
-# Map Generation Memory Usage
-
-## Problem:
-
-The map generation function's memory usage scales quadratically - O(n²), this will make generating large maps impossible unless the server has a ton of memory.
-
-## Proposal:
-
-Change the map generation function to generate the grid 1 row at a time and save the rows to the SQL database sequentially, freeing each row from scope so it can be garbage collected after it is saved to the disk.
-
-## Result:
-
-Map generation function's memory usage will scale linearly - O(gridSize) allowing for the generation of much larger maps without overloading the server.
-
-
-# Websocket Closing
-
-The websocket on the production server closes after a period of time.
-
-## Proposal:
-
-Set up an intermittent ping/pong on the websocket to maintain the connection.
-
-## Result:
-
-Connection to game server remains open even if player is idle.
-
-
 # Limit Server Requests
 
 The client requests the game map every time the player moves.
@@ -50,3 +22,33 @@ Establish a 1 second global tick on the server - messages from clients should po
 ## Result:
 
 This will make concurrent multiplayer possible by keeping all of the clients' gamestates in sync with the server.
+
+
+<!-- # ARCHIVES - FIXED ISSUES -->
+
+<!-- # Map Generation Memory Usage
+
+## Problem:
+
+The map generation function's memory usage scales quadratically - O(n²), this will make generating large maps impossible unless the server has a ton of memory.
+
+## Proposal:
+
+Change the map generation function to generate the grid 1 row at a time and save the rows to the SQL database sequentially, freeing each row from scope so it can be garbage collected after it is saved to the disk.
+
+## Result:
+
+Map generation function's memory usage will scale linearly - O(gridSize) allowing for the generation of much larger maps without overloading the server. -->
+
+
+<!-- # Websocket Closing
+
+The websocket on the production server closes after a period of time.
+
+## Proposal:
+
+Set up an intermittent ping/pong on the websocket to maintain the connection.
+
+## Result:
+
+Connection to game server remains open even if player is idle. -->

@@ -2,11 +2,13 @@
 package websocket
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
 	"server/database"
 	"server/types"
 	"sync"
+	"time"
 
 	"github.com/gorilla/websocket"
 )
@@ -48,6 +50,23 @@ func HandleWebSocketConnection(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Error upgrading to WebSocket: %v", err)
 		return
 	}
+
+	conn.SetPingHandler(func(appData string) error {
+		var msg Message
+		err := json.Unmarshal([]byte(appData), &msg)
+		if err != nil {
+			log.Printf("Error reading ping message: %v", err)
+			return err
+		}
+
+		if msg.Type == "ping" {
+			// Send a pong in response to the ping
+			return conn.WriteControl(websocket.PongMessage, []byte{}, time.Now().Add(time.Second))
+		}
+
+		return nil
+	})
+
 	// Ensure the connection is closed when the function returns
 	defer closeConnection(conn)
 
@@ -108,106 +127,3 @@ func closeConnection(conn *websocket.Conn) {
 	clients.Delete(conn)
 	log.Println("WebSocket connection closed.")
 }
-
-// import (
-// 	"fmt"
-// 	"log"
-// 	"net/http"
-// 	"sync"
-// 	"time"
-
-// 	"github.com/gorilla/websocket"
-// )
-
-// // Message represents the structure of the messages sent over the WebSocket.
-// type Message struct {
-// 	Value int `json:"value"`
-// }
-
-// // HandleWebSocketConnection upgrades HTTP connections to WebSocket and manages WebSocket connections.
-// func HandleWebSocketConnection(w http.ResponseWriter, r *http.Request) {
-// 	// Upgrade the HTTP connection to a WebSocket connection
-// 	conn, err := upgrader.Upgrade(w, r, nil)
-// 	if err != nil {
-// 		log.Printf("Error upgrading to WebSocket: %v", err)
-// 		return
-// 	}
-// 	// Ensure the connection is closed when the function returns
-// 	defer closeConnection(conn)
-
-// 	// Store the connection in the clients map
-// 	clients.Store(conn, true)
-
-// 	// Send the initial value to the client
-// 	initialValue := Message{Value: generateNewValue()}
-// 	if err := conn.WriteJSON(initialValue); err != nil {
-// 		log.Printf("Error sending initial value: %v", err)
-// 		return
-// 	}
-
-// 	// Handle incoming messages
-// 	for {
-// 		if _, _, err := conn.ReadMessage(); err != nil {
-// 			log.Printf("Error reading message: %v", err)
-// 			if websocket.IsCloseError(err, websocket.CloseNormalClosure, websocket.CloseGoingAway) {
-// 				log.Println("WebSocket connection closed.")
-// 			}
-// 			return
-// 		}
-// 	}
-// }
-
-// // generateNewValue generates a new value based on a cycling sequence.
-// func generateNewValue() int {
-// 	// Lock the counter to prevent concurrent access
-// 	counterMutex.Lock()
-// 	defer counterMutex.Unlock()
-
-// 	// Generate a new value by cycling through the values array
-// 	value := cyclingValues[counter]
-// 	counter = (counter + 1) % len(cyclingValues)
-
-// 	fmt.Printf("Broadcasting new value: %d (counter: %d)\n", value, counter)
-
-// 	return value
-// }
-
-// // Initialize the package by starting the broadcast goroutine
-// func init() {
-// 	go broadcastMessages()
-// }
-
-// // broadcastMessages broadcasts new values to all clients every (n * seconds).
-// func broadcastMessages() {
-// 	defer ticker.Stop()
-
-// 	for {
-// 		select {
-// 		case <-ticker.C:
-// 			// Generate a new value every (n * seconds)
-// 			newValue := Message{Value: generateNewValue()}
-
-// 			// Convert sync.Map to a regular map for iteration
-// 			clients.Range(func(key, value interface{}) bool {
-// 				conn := key.(*websocket.Conn)
-// 				if err := conn.WriteJSON(newValue); err != nil {
-// 					log.Printf("Error broadcasting: %v", err)
-// 				}
-// 				return true // continue iteration
-// 			})
-
-// 			log.Printf("Broadcasted message at: %v", time.Now())
-// 		case <-done:
-// 			// Exit the goroutine when done is closed
-// 			return
-// 		}
-// 	}
-
-// }
-
-// // closeConnection closes a WebSocket connection and removes it from the clients map.
-// func closeConnection(conn *websocket.Conn) {
-// 	conn.Close()
-// 	clients.Delete(conn)
-// 	log.Println("WebSocket connection closed.")
-// }

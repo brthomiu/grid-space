@@ -14,7 +14,7 @@ func StartGameServer() {
 	// newGridStr := os.Getenv("NEW_GRID")
 	// newGrid := strings.ToUpper(newGridStr) == "Y"
 
-	newGrid := true
+	newGrid := false
 
 	if newGrid {
 		fmt.Println("Generating a new grid...")
