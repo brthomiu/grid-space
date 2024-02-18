@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Tile from "../tiles/Tile";
 import { Tile as TTile, Location } from "../../types/types";
 import { config } from "../../config/config";
@@ -12,10 +12,6 @@ type Props = {
 const Grid: React.FC<Props> = ({ grid, currentLocation }) => {
   // Generate a grid of tiles based on the specified size
   const tiles = grid;
-
-  useEffect(() => {
-    console.log(tiles);
-  }, [tiles]);
 
   // Render the grid component with CSS Grid layout
   return (

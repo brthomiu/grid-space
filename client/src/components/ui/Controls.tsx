@@ -40,9 +40,7 @@ export default function Controls({
   return (
     <>
       <h1 className="text-white">GRID-SPACE v0.1</h1>
-      <p className="text-white">
-        Press a direction to begin.
-      </p>
+      <p className="text-white">Press a direction to begin.</p>
       <div className="text-red-100 flex gap-4">
         <button onClick={() => handleMoveUp()}>Up</button>
         <button onClick={() => handleMoveDown()}>Down</button>
