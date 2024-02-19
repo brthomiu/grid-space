@@ -34,3 +34,18 @@ type Resource struct {
 	Quantity int
 	Quality  int
 }
+
+type PlayerLocationPayload struct {
+	PlayerId string
+	Location Location
+}
+
+type Message struct {
+	Type    string
+	Payload PlayerLocationPayload
+}
+
+type Response struct {
+	Type    string
+	Payload []Tile
+}
