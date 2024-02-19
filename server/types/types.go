@@ -1,5 +1,9 @@
 package types
 
+import (
+	"encoding/json"
+)
+
 type Grid struct {
 	Size int
 }
@@ -35,14 +39,19 @@ type Resource struct {
 	Quality  int
 }
 
-type PlayerLocationPayload struct {
+type Message struct {
+	Type    string
+	Payload json.RawMessage
+}
+
+type GetPlayerMapMessage struct {
 	PlayerId string
 	Location Location
 }
 
-type Message struct {
-	Type    string
-	Payload PlayerLocationPayload
+type MoveMessage struct {
+	Id           string
+	NextLocation Location
 }
 
 type Response struct {
