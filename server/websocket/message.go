@@ -29,13 +29,6 @@ func handleIncomingMessages(conn *websocket.Conn) {
 		}
 
 		switch msg.Type {
-		case "GetPlayerMap":
-			var payload types.GetPlayerMapMessage
-			if err := json.Unmarshal(msg.Payload, &payload); err != nil {
-				log.Printf("Error decoding GetPlayerMapMessage: %v", err)
-				return
-			}
-			handleGetPlayerMap(conn, payload)
 		case "MoveMessage":
 			var payload types.MoveMessage
 			if err := json.Unmarshal(msg.Payload, &payload); err != nil {
@@ -43,53 +36,12 @@ func handleIncomingMessages(conn *websocket.Conn) {
 				return
 			}
 			handleMovePlayer(conn, payload)
-		case "ping":
+		case "ping": // Ignore ping messages
 		default:
 			log.Printf("Unknown message type: %v", msg.Type)
 		}
 	}
 
-}
-
-func getPlayerMap(playerId string, location types.Location) ([]types.Tile, error) {
-	tiles, err := database.GetTilesInRange("gameGrid.db", location.X, location.Y, 3, 3)
-	if err != nil {
-		// handle the error, for example, return it to the caller
-		return nil, err
-	}
-	return tiles, nil
-}
-
-func handleGetPlayerMap(conn *websocket.Conn, msg types.GetPlayerMapMessage) {
-	// Extract playerId and location from the message
-	playerId := msg.PlayerId
-	location := msg.Location
-
-	// Run your function with the playerId and location
-	tiles, err := getPlayerMap(playerId, location)
-	if err != nil {
-		// Handle the error
-		log.Printf("Error getting player map: %v", err)
-		return
-	}
-
-	// Send the results back to the client
-	err = conn.WriteJSON(types.Response{
-		Type:    "GetPlayerMap",
-		Payload: tiles,
-	})
-	if err != nil {
-		log.Printf("Error sending results: %v", err)
-	}
-}
-
-func movePlayer(Id string, nextLocation types.Location) ([]types.Tile, error) {
-	tiles, err := database.GetTilesInRange("gameGrid.db", nextLocation.X, nextLocation.Y, 3, 3)
-	if err != nil {
-		// handle the error, for example, return it to the caller
-		return nil, err
-	}
-	return tiles, nil
 }
 
 func handleMovePlayer(conn *websocket.Conn, msg types.MoveMessage) {
@@ -98,14 +50,22 @@ func handleMovePlayer(conn *websocket.Conn, msg types.MoveMessage) {
 	NextLocation := msg.NextLocation
 
 	// Run your function with the playerId and location
-	tiles, err := movePlayer(Id, NextLocation)
+	err := database.UpdatePlayerLocation("gameGrid.db", Id, NextLocation)
 	if err != nil {
 		// Handle the error
 		log.Printf("Error moving player: %v", err)
 		return
 	}
 
-	// Send the results back to the client
+	// Get all tiles within a 5x5 range of the new location
+	tiles, err := database.GetTilesInRange("gameGrid.db", NextLocation.X, NextLocation.Y, 5, 5)
+	if err != nil {
+		// Handle the error
+		log.Printf("Error getting tiles in range: %v", err)
+		return
+	}
+
+	// Send the tiles back to the client
 	err = conn.WriteJSON(types.Response{
 		Type:    "MovePlayer",
 		Payload: tiles,

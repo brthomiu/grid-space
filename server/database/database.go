@@ -157,3 +157,38 @@ func GetTilesInRange(dbName string, rootX, rootY, rangeX, rangeY int) ([]types.T
 
 	return tiles, nil
 }
+
+// UpdatePlayerLocation updates the player's location in the database.
+func UpdatePlayerLocation(dbName string, Id string, nextLocation types.Location) error {
+	// Open a connection to the SQLite database
+	db, err := OpenDatabase(dbName)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	// Start a new transaction
+	tx, err := db.Begin()
+	if err != nil {
+		return err
+	}
+
+	// Update the player's location in the database
+	_, err = tx.Exec(`
+		UPDATE tiles
+		SET locationX = ?, locationY = ?
+		WHERE id = ?;
+	`, nextLocation.X, nextLocation.Y, Id)
+	if err != nil {
+		tx.Rollback()
+		return fmt.Errorf("error updating player location: %v", err)
+	}
+
+	// Commit the transaction
+	err = tx.Commit()
+	if err != nil {
+		return fmt.Errorf("error committing transaction: %v", err)
+	}
+
+	return nil
+}

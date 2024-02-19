@@ -21,16 +21,18 @@ type UnitStats struct {
 }
 
 type Unit struct {
-	Id    string
-	Type  string
-	Name  string
-	Stats UnitStats
+	Id       string
+	Type     string
+	Name     string
+	Stats    UnitStats
+	Location Location
 }
 
 type Tile struct {
 	Location Location
 	Resource Resource
 	Occupied bool
+	Unit     Unit
 }
 
 type Resource struct {
