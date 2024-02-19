@@ -2,6 +2,7 @@ import React from "react";
 import Tile from "../tiles/Tile";
 import { Tile as TTile, Location } from "../../types/types";
 import { config } from "../../config/config";
+import { useCreateCharacter } from "../../hooks/character";
 
 type Props = {
   grid: TTile[];
@@ -12,6 +13,8 @@ type Props = {
 const Grid: React.FC<Props> = ({ grid, currentLocation }) => {
   // Generate a grid of tiles based on the specified size
   const tiles = grid;
+
+  useCreateCharacter();
 
   // Render the grid component with CSS Grid layout
   return (
