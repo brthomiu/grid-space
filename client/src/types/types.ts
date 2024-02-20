@@ -56,3 +56,13 @@ export type MoveMessagePayload = {
   Id: string,
   NextLocation: Location,
 }
+
+export type MoveMessageResponse = {
+  Type: string,
+  Payload: MoveResponsePayload,
+}
+
+export type MoveResponsePayload = {
+  Tiles: [Tile],
+  NextLocation: Location,
+}

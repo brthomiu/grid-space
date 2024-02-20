@@ -1,13 +1,14 @@
 import { Unit } from "../types/types";
 
-export const useCreateCharacter = () => {
+export const useCreateCharacter = (
+  characterObject: Unit | null | undefined,
+  setCharacterObject: React.Dispatch<
+    React.SetStateAction<Unit | null | undefined>
+  >
+) => {
   const getCharacter = () => {
-    const currentCharacter = localStorage.getItem("playerCharacter");
-
-    if (currentCharacter) {
-      const parsedCharacter: Unit = JSON.parse(currentCharacter);
-
-      if (parsedCharacter.Id) return;
+    if (characterObject) {
+      return;
     } else {
       const id = new Date().getTime().toString();
 
@@ -25,7 +26,8 @@ export const useCreateCharacter = () => {
           Y: 5,
         },
       };
-      localStorage.setItem("playerCharacter", JSON.stringify(newCharacter));
+      console.log("newCharacter", newCharacter)
+      setCharacterObject(newCharacter);
     }
   };
 
