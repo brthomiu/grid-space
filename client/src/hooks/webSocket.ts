@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect } from "react";
-import { MoveMessageResponse, Tile, Unit } from "../types/types";
+import { CharacterCreationResponse, Tile, Unit } from "../types/types";
 import { ReadyState } from "react-use-websocket";
 
 export const useUpdatePlayerLocation = (
@@ -18,15 +18,16 @@ export const useUpdatePlayerLocation = (
 
     // Update UI whenever the subscribed value changes
     if (lastMessage && lastMessage.data) {
-      const messageData: MoveMessageResponse = JSON.parse(lastMessage.data);
+      const messageData = JSON.parse(lastMessage.data);
 
-      console.log("messageData--------------", messageData)
-
-      if (!characterObject ||typeof characterObject == "undefined") {
-       throw Error ("useUpdatePlayerLocation hook characterObject is either null or undefined") 
-      }
+      console.log("messageData--------------", messageData);
 
       if (messageData.Type === "MovePlayer") {
+        if (!characterObject || typeof characterObject == "undefined") {
+          throw Error(
+            "useUpdatePlayerLocation hook characterObject is either null or undefined"
+          );
+        }
 
         const newCharacterObject = {
           Id: characterObject.Id,
@@ -37,14 +38,36 @@ export const useUpdatePlayerLocation = (
         };
 
         setCharacterObject(newCharacterObject);
-        console.log("newCharacterObject location updated websocket hook, -----", newCharacterObject)
+        console.log(
+          "newCharacterObject location updated websocket hook, -----",
+          newCharacterObject
+        );
 
         setCurrentMap(messageData.Payload.Tiles); // Update the state with the received tiles
+      }
+
+      if (messageData.Type === "CharacterCreationResponse") {
+        const newCharacterResponse: CharacterCreationResponse = messageData;
+
+        const newCharacterObject = {
+          Id: newCharacterResponse.Payload.CharacterObject.Id,
+          Location: newCharacterResponse.Payload.CharacterObject.Location,
+          Name: newCharacterResponse.Payload.CharacterObject.Name,
+          Stats: newCharacterResponse.Payload.CharacterObject.Stats,
+          Type: newCharacterResponse.Payload.CharacterObject.Type,
+        };
+
+        setCharacterObject(newCharacterObject);
+        console.log(
+          "newCharacterObject new character websocket hook, -----",
+          newCharacterObject
+        );
+
       }
     }
 
     console.log("Exiting useEffect");
-  }, [lastMessage]); 
+  }, [lastMessage]);
 };
 
 export const usePingServer = (readyState: ReadyState, sendMessage: any) => {

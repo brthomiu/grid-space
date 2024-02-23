@@ -13,6 +13,8 @@ const Grid: React.FC<Props> = ({ grid, currentLocation }) => {
   // Generate a grid of tiles based on the specified size
   const tiles = grid;
 
+  console.log("TILES-----------------", tiles)
+
   // Render the grid component with CSS Grid layout
   return (
     <div>
@@ -25,6 +27,7 @@ const Grid: React.FC<Props> = ({ grid, currentLocation }) => {
         {/* Map through the generated tiles and render each Tile component */}
         {tiles.map((tile) => (
           <Tile
+            unitId={tile.Unit}
             currentLocation={currentLocation}
             key={`${tile.Location.X}-${tile.Location.Y}`}
             tile={tile}

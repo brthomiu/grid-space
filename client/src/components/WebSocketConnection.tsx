@@ -5,13 +5,13 @@ import Grid from "./grid/Grid";
 import { Tile, Unit } from "../types/types";
 import Controls from "./ui/Controls";
 import { usePingServer, useUpdatePlayerLocation } from "../hooks/webSocket";
-import { useCreateCharacter } from "../hooks/character";
-
-
+// import { useCreateCharacter } from "../hooks/character";
+import { Login } from "./ui/Login";
 
 const WebSocketConnection = () => {
-
-  const [characterObject, setCharacterObject] = useState<Unit | null | undefined>();
+  const [characterObject, setCharacterObject] = useState<
+    Unit | null | undefined
+  >();
 
   // Change from localhost to heroku before deploying
   const socketUrl = "ws://localhost:8080/ws";
@@ -21,9 +21,14 @@ const WebSocketConnection = () => {
 
   const [currentMap, setCurrentMap] = useState<Tile[]>();
 
-  useCreateCharacter(characterObject, setCharacterObject);
+  // useCreateCharacter(characterObject, setCharacterObject);
 
-  useUpdatePlayerLocation(characterObject, setCharacterObject, setCurrentMap, lastMessage);
+  useUpdatePlayerLocation(
+    characterObject,
+    setCharacterObject,
+    setCurrentMap,
+    lastMessage
+  );
 
   usePingServer(readyState, sendMessage);
 
@@ -34,11 +39,9 @@ const WebSocketConnection = () => {
       )}
       <div className="text-green-400">
         <p>WebSocket Ready State: {ReadyState[readyState]}</p>
-        <Controls
-          sendMessage={sendMessage}
-          characterObject={characterObject}
-        />
+        <Controls sendMessage={sendMessage} characterObject={characterObject} />
       </div>
+      <Login characterObject={characterObject} sendMessage={sendMessage} />
     </div>
   );
 };

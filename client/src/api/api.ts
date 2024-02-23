@@ -1,5 +1,11 @@
 import { SendMessage } from "react-use-websocket";
-import { Location, SyncMessage, MoveMessage, Unit } from "../types/types";
+import {
+  Location,
+  SyncMessage,
+  MoveMessage,
+  Unit,
+  CharacterCreationMessage,
+} from "../types/types";
 
 export const playerMapMessage = (playerId: string, location: Location) => {
   const message = {
@@ -26,7 +32,8 @@ export const createSyncMessage = (
   return serverMessage;
 };
 
-export const createMoveMessage = (characterObject: Unit,
+export const createMoveMessage = (
+  characterObject: Unit,
   NextLocation: Location | null
 ): MoveMessage | Error => {
   const Id = characterObject.Id;
@@ -46,9 +53,27 @@ export const createMoveMessage = (characterObject: Unit,
   return moveMessage;
 };
 
-export const sendMoveMessage = (characterObject: Unit,
+export const sendMoveMessage = (
+  characterObject: Unit,
   nextLocation: Location,
   sendMessage: SendMessage
 ) => {
   sendMessage(JSON.stringify(createMoveMessage(characterObject, nextLocation)));
+};
+
+export const createCharacterCreationMessage = (Name: string) => {
+  const characterCreationMessage: CharacterCreationMessage = {
+    Type: "CharacterCreationMessage",
+    Payload: {
+      Name,
+    },
+  };
+  return characterCreationMessage
+};
+
+export const sendCharacterCreationmessage = (name: string, sendMessage: SendMessage) => {
+
+  const messageObject = createCharacterCreationMessage(name)
+  const message = JSON.stringify(messageObject)
+  sendMessage(message);
 };

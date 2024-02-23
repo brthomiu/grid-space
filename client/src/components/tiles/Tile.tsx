@@ -5,12 +5,13 @@ type Props = {
   // The tile object containing location information.
   tile: TileType;
   currentLocation: Location;
+  unitId: string;
 };
 
 // Functional component representing an individual tile in the grid.
-const Tile: React.FC<Props> = ({ tile, currentLocation }) => {
+const Tile: React.FC<Props> = ({ tile, currentLocation, unitId }) => {
   // Extract the location from the tile object
-  const { Location, Resource, Occupied } = tile;
+  const { Location, Resource } = tile;
 
   const tileBg = (ResourceType: string) => {
     if (Location.X == currentLocation.X && Location.Y == currentLocation.Y) {
@@ -44,10 +45,9 @@ const Tile: React.FC<Props> = ({ tile, currentLocation }) => {
       {/* Display the coordinates of the tile */}
       {`(${Location.X + 1}, ${Location.Y + 1})`}
       <div className="flex flex-row">
-      {Location.X == currentLocation.X && Location.Y == currentLocation.Y && (
+      {unitId && (
         <h1 className="text-[1rem]">🙂</h1>
       )}
-      {Occupied && <h2>😈</h2>}
       </div>
     </div>
   );

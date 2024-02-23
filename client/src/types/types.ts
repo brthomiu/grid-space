@@ -20,8 +20,7 @@ export type Unit = {
 export type Tile = {
   Location: Location;
   Resource: Resource;
-  Occupied: boolean;
-  Unit: Unit | null;
+  Unit: string;
 };
 
 export type Resource = {
@@ -50,19 +49,37 @@ export type ServerMessagePayload = {
 export type MoveMessage = {
   Type: string;
   Payload: MoveMessagePayload;
-}
+};
 
 export type MoveMessagePayload = {
-  Id: string,
-  NextLocation: Location,
-}
+  Id: string;
+  NextLocation: Location;
+};
 
 export type MoveMessageResponse = {
-  Type: string,
-  Payload: MoveResponsePayload,
-}
+  Type: string;
+  Payload: MoveResponsePayload;
+};
 
 export type MoveResponsePayload = {
-  Tiles: [Tile],
-  NextLocation: Location,
-}
+  Tiles: [Tile];
+  NextLocation: Location;
+};
+
+export type CharacterCreationMessage = {
+  Type: string;
+  Payload: CharacterCreationMessagePayload;
+};
+
+export type CharacterCreationMessagePayload = {
+  Name: string;
+};
+
+export type CharacterCreationResponse = {
+  Type: string;
+  Payload: CharacterCreationResponsePayload;
+};
+
+export type CharacterCreationResponsePayload = {
+  CharacterObject: Unit
+};
