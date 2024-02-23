@@ -14,7 +14,7 @@ func StartGameServer() {
 	// newGridStr := os.Getenv("NEW_GRID")
 	// newGrid := strings.ToUpper(newGridStr) == "Y"
 
-	newGrid := false
+	newGrid := true
 
 	if newGrid {
 		fmt.Println("Generating a new grid...")
@@ -24,7 +24,7 @@ func StartGameServer() {
 		gridSize, err := strconv.Atoi(gridSizeStr)
 		if err != nil {
 			// Use a default value if GRID_SIZE is not set or is not a valid integer
-			gridSize = 1000
+			gridSize = 500
 		}
 
 		// Validate the grid size
@@ -36,12 +36,17 @@ func StartGameServer() {
 		// Generate the grid with the specified size
 		grid := CreateGrid(gridSize)
 
+		// Create the character table in the specified database
+		database.CreateCharactersTable("gameGrid.db")
+
 		// Save the grid to the SQLite database
 		dbName := "gameGrid.db" // Replace with your desired database name
 		if err := database.SaveGridToDatabase(grid, dbName); err != nil {
 			fmt.Println("Error saving grid to database:", err)
+
 			return
 		}
+
 	} else {
 		fmt.Println("Exiting without generating a new grid.")
 	}

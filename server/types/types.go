@@ -13,11 +13,9 @@ type Location struct {
 }
 
 type UnitStats struct {
-	Health   int
-	Attack   int
-	Defense  int
-	Movement int
-	Range    int
+	Health  int
+	Attack  int
+	Defense int
 }
 
 type Unit struct {
@@ -31,8 +29,7 @@ type Unit struct {
 type Tile struct {
 	Location Location
 	Resource Resource
-	Occupied bool
-	Unit     Unit
+	Unit     string
 }
 
 type Resource struct {
@@ -56,7 +53,35 @@ type MoveMessage struct {
 	NextLocation Location
 }
 
+type MoveMessagePayload struct {
+	Tiles        []Tile
+	NextLocation Location
+}
+
+type MoveMessageResponse struct {
+	Type    string
+	Payload MoveMessagePayload
+}
+
 type Response struct {
 	Type    string
 	Payload []Tile
+}
+
+type CharacterCreationMessage struct {
+	Type    string
+	Payload CharacterCreationMessagePayload
+}
+
+type CharacterCreationMessagePayload struct {
+	Name string
+}
+
+type CharacterCreationResponse struct {
+	Type    string
+	Payload CharacterCreationResponsePayload
+}
+
+type CharacterCreationResponsePayload struct {
+	CharacterObject Unit
 }

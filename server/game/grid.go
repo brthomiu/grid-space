@@ -22,7 +22,6 @@ func CreateGrid(size int) [][]types.Tile {
 			grid[x][y] = types.Tile{
 				Location: types.Location{X: x, Y: y},
 				Resource: GenerateRandomResource(),
-				Occupied: rand.Intn(2) == 1, // Randomly set Occupied to true or false
 			}
 		}
 	}
