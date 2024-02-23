@@ -1,3 +1,26 @@
+# SHORTLIST
+
+Remove characters from grid when connection is closed.
+
+    -> null location from grid and character SQL tables
+    -> when player logs in with same name, generate a new random location for player to spawn
+
+Handle location collisions.
+
+    -> check if a tile is occupied and don't let players move into an occupied tile
+
+Server tick rate + handle requests in batches
+
+    -> see longlist for more detail
+        -> this needs to be done before fixing how the client renders
+
+Fix the way the frontend renders.
+
+    -> Rerender should be triggered by global ticks from the server
+
+
+# LONGLIST
+
 # Limit Server Requests
 
 The client requests the game map every time the player moves.
