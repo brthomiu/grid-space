@@ -14,7 +14,6 @@ export type Unit = {
   Type: string;
   Name: string;
   Stats: UnitStats;
-  Location: Location;
 };
 
 export type Tile = {
@@ -34,18 +33,6 @@ export type LocationMessage = {
   Payload: Tile[];
 };
 
-export type SyncMessage = {
-  Type: string;
-  Payload: ServerMessagePayload;
-};
-
-export type ServerMessagePayload = {
-  Id: string;
-  Location: Location;
-  Stats: UnitStats;
-  Message: string | null;
-};
-
 export type MoveMessage = {
   Type: string;
   Payload: MoveMessagePayload;
@@ -53,7 +40,7 @@ export type MoveMessage = {
 
 export type MoveMessagePayload = {
   Id: string;
-  NextLocation: Location;
+  Direction: string;
 };
 
 export type MoveMessageResponse = {
@@ -82,4 +69,5 @@ export type CharacterCreationResponse = {
 
 export type CharacterCreationResponsePayload = {
   CharacterObject: Unit
+  Location: Location
 };

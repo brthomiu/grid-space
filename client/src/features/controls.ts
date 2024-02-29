@@ -4,29 +4,17 @@ import { Unit } from "../types/types";
 
 
 export const handleMoveLeft = (characterObject: Unit, sendMessage: SendMessage) => {
-  const currentLocation = characterObject.Location;
-  const newLocation = { X: currentLocation.X, Y: currentLocation.Y - 1 };
-  console.log("new location ----> ", newLocation);
-  sendMoveMessage(characterObject, newLocation, sendMessage);
+  sendMoveMessage(characterObject.Id, "left", sendMessage);
 };
 
 export const handleMoveRight = (characterObject: Unit, sendMessage: SendMessage) => {
-  const currentLocation = characterObject.Location;
-  const newLocation = { X: currentLocation.X, Y: currentLocation.Y + 1 };
-  console.log("new location ----> ", newLocation);
-  sendMoveMessage(characterObject, newLocation, sendMessage);
+  sendMoveMessage(characterObject.Id, "right",  sendMessage);
 };
 
 export const handleMoveUp = (characterObject: Unit, sendMessage: SendMessage) => {
-  const currentLocation = characterObject.Location;
-  const newLocation = { X: currentLocation.X - 1, Y: currentLocation.Y };
-  console.log("new location ----> ", newLocation);
-  sendMoveMessage(characterObject, newLocation, sendMessage);
+  sendMoveMessage(characterObject.Id, "up",  sendMessage);
 };
 
 export const handleMoveDown = (characterObject: Unit, sendMessage: SendMessage) => {
-  const currentLocation = characterObject.Location;
-  const newLocation = { X: currentLocation.X + 1, Y: currentLocation.Y };
-  console.log("new location ----> ", newLocation);
-  sendMoveMessage(characterObject, newLocation, sendMessage);
+  sendMoveMessage(characterObject.Id, "down",  sendMessage);
 };

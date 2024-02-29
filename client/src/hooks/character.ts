@@ -20,11 +20,7 @@ export const useCreateCharacter = (
           Health: 10,
           Attack: 3,
           Defense: 1,
-        },
-        Location: {
-          X: 5,
-          Y: 5,
-        },
+        }
       };
       console.log("newCharacter", newCharacter)
       setCharacterObject(newCharacter);

@@ -14,7 +14,7 @@ type Props = {
 
 export default function Controls({ sendMessage, characterObject }: Props) {
   return (
-    characterObject?.Location && (
+    characterObject && (
       <>
         <h1 className="text-white">GRID-SPACE v0.1</h1>
         <p className="text-white">Press a direction to begin.</p>

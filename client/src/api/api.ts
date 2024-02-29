@@ -1,9 +1,7 @@
 import { SendMessage } from "react-use-websocket";
 import {
   Location,
-  SyncMessage,
   MoveMessage,
-  Unit,
   CharacterCreationMessage,
 } from "../types/types";
 
@@ -18,47 +16,35 @@ export const playerMapMessage = (playerId: string, location: Location) => {
   return message;
 };
 
-export const createSyncMessage = (
-  characterObject: Unit,
-  Message: string | null
-): SyncMessage | Error => {
-  const { Id, Location, Stats } = characterObject;
-
-  const serverMessage: SyncMessage = {
-    Type: "ServerMessage",
-    Payload: { Id, Location, Stats, Message },
-  };
-
-  return serverMessage;
-};
-
 export const createMoveMessage = (
-  characterObject: Unit,
-  NextLocation: Location | null
+  Id: string,
+  Direction: string
 ): MoveMessage | Error => {
-  const Id = characterObject.Id;
+  if (!Id) {
+    throw Error("Movement failed: No player ID!");
+  }
 
-  if (!NextLocation) {
-    throw Error("Movement failed: No move message");
+  if (!Direction) {
+    throw Error("Movement failed: No move direction!");
   }
 
   const moveMessage: MoveMessage = {
     Type: "MoveMessage",
     Payload: {
       Id,
-      NextLocation,
+      Direction,
     },
   };
-
+  console.log("Sending movement message to server---->", moveMessage)
   return moveMessage;
 };
 
 export const sendMoveMessage = (
-  characterObject: Unit,
-  nextLocation: Location,
+  id: string,
+  direction: string,
   sendMessage: SendMessage
 ) => {
-  sendMessage(JSON.stringify(createMoveMessage(characterObject, nextLocation)));
+  sendMessage(JSON.stringify(createMoveMessage(id, direction)));
 };
 
 export const createCharacterCreationMessage = (Name: string) => {
@@ -68,12 +54,14 @@ export const createCharacterCreationMessage = (Name: string) => {
       Name,
     },
   };
-  return characterCreationMessage
+  return characterCreationMessage;
 };
 
-export const sendCharacterCreationmessage = (name: string, sendMessage: SendMessage) => {
-
-  const messageObject = createCharacterCreationMessage(name)
-  const message = JSON.stringify(messageObject)
+export const sendCharacterCreationmessage = (
+  name: string,
+  sendMessage: SendMessage
+) => {
+  const messageObject = createCharacterCreationMessage(name);
+  const message = JSON.stringify(messageObject);
   sendMessage(message);
 };

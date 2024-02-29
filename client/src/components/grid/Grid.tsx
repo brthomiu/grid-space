@@ -5,7 +5,7 @@ import { config } from "../../config/config";
 
 type Props = {
   grid: TTile[];
-  currentLocation: Location;
+  currentLocation: Location | null | undefined;
 };
 
 // Functional component representing a grid of tiles.
@@ -13,7 +13,7 @@ const Grid: React.FC<Props> = ({ grid, currentLocation }) => {
   // Generate a grid of tiles based on the specified size
   const tiles = grid;
 
-  console.log("TILES-----------------", tiles)
+  console.log("TILES-----------------", tiles);
 
   // Render the grid component with CSS Grid layout
   return (
@@ -25,14 +25,16 @@ const Grid: React.FC<Props> = ({ grid, currentLocation }) => {
         }}
       >
         {/* Map through the generated tiles and render each Tile component */}
-        {tiles.map((tile) => (
-          <Tile
-            unitId={tile.Unit}
-            currentLocation={currentLocation}
-            key={`${tile.Location.X}-${tile.Location.Y}`}
-            tile={tile}
-          />
-        ))}
+
+        {currentLocation &&
+          tiles.map((tile) => (
+            <Tile
+              unitId={tile.Unit}
+              currentLocation={currentLocation}
+              key={`${tile.Location.X}-${tile.Location.Y}`}
+              tile={tile}
+            />
+          ))}
       </div>
     </div>
   );
