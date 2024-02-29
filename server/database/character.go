@@ -4,13 +4,16 @@ import (
 	"database/sql"
 	"encoding/hex"
 	"fmt"
+	"log"
 	"math/rand"
 	"server/types"
+	"sync"
 
+	"github.com/gorilla/websocket"
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func CreateCharacter(dbName string, name string) (*types.Unit, error) {
+func CreateCharacter(dbName string, name string) (*types.CharacterCreationObject, error) {
 	// Open a connection to the SQLite database
 	db, err := OpenDatabase(dbName)
 	if err != nil {
@@ -65,8 +68,8 @@ func CreateCharacter(dbName string, name string) (*types.Unit, error) {
 
 	// Insert the new character into the database
 	_, err = tx.Exec(`
-		INSERT INTO characters (id, type, name, statsHealth, statsAttack, statsDefense, locationX, locationY)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+		INSERT INTO characters (id, type, name, statsHealth, statsAttack, statsDefense)
+		VALUES (?, ?, ?, ?, ?, ?)
 	`, id, charType, name, statsHealth, statsAttack, statsDefense, locationX, locationY)
 	if err != nil {
 		tx.Rollback()
@@ -100,13 +103,17 @@ func CreateCharacter(dbName string, name string) (*types.Unit, error) {
 			Attack:  statsAttack,
 			Defense: statsDefense,
 		},
+	}
+
+	newCharacterObj := &types.CharacterCreationObject{
+		UnitObj: *unitObj,
 		Location: types.Location{
 			X: locationX,
 			Y: locationY,
 		},
 	}
 
-	return unitObj, nil
+	return newCharacterObj, nil
 }
 
 func CreateCharactersTable(dbName string) error {
@@ -117,6 +124,12 @@ func CreateCharactersTable(dbName string) error {
 	}
 	defer db.Close()
 
+	// Drop the table if it exists
+	_, err = db.Exec(`DROP TABLE IF EXISTS characters;`)
+	if err != nil {
+		return fmt.Errorf("error dropping table: %v", err)
+	}
+
 	_, err = db.Exec(`
 	CREATE TABLE IF NOT EXISTS characters (
 		id TEXT PRIMARY KEY,
@@ -124,9 +137,7 @@ func CreateCharactersTable(dbName string) error {
 		name TEXT UNIQUE,
 		statsHealth INTEGER,
 		statsAttack INTEGER,
-		statsDefense INTEGER,
-		locationX INTEGER,
-		locationY INTEGER
+		statsDefense INTEGER
 	)
 	`)
 
@@ -134,6 +145,37 @@ func CreateCharactersTable(dbName string) error {
 		return fmt.Errorf("error creating table: %v", err)
 	}
 	return nil
+}
+
+func GetPlayerLocation(dbName string, Id string) (types.Location, error) {
+	// Open a connection to the SQLite database
+	db, err := OpenDatabase(dbName)
+	if err != nil {
+		return types.Location{}, err
+	}
+	defer db.Close()
+
+	// Start a new transaction
+	tx, err := db.Begin()
+	if err != nil {
+		return types.Location{}, err
+	}
+
+	// Get the old location of the player from the characters table
+	var oldLocation types.Location
+	err = tx.QueryRow("SELECT locationX, locationY FROM tiles WHERE unit = ?", Id).Scan(&oldLocation.X, &oldLocation.Y)
+	if err != nil {
+		tx.Rollback()
+		return types.Location{}, fmt.Errorf("error getting old location: %v", err)
+	}
+
+	// Commit the transaction
+	err = tx.Commit()
+	if err != nil {
+		return types.Location{}, fmt.Errorf("error committing transaction: %v", err)
+	}
+	return oldLocation, nil
+
 }
 
 func UpdatePlayerLocation(dbName string, Id string, nextLocation types.Location) error {
@@ -152,7 +194,7 @@ func UpdatePlayerLocation(dbName string, Id string, nextLocation types.Location)
 
 	// Get the old location of the player from the characters table
 	var oldLocation types.Location
-	err = tx.QueryRow("SELECT locationX, locationY FROM characters WHERE id = ?", Id).Scan(&oldLocation.X, &oldLocation.Y)
+	err = tx.QueryRow("SELECT locationX, locationY FROM tiles WHERE unit = ?", Id).Scan(&oldLocation.X, &oldLocation.Y)
 	if err != nil {
 		tx.Rollback()
 		return fmt.Errorf("error getting old location: %v", err)
@@ -167,17 +209,6 @@ func UpdatePlayerLocation(dbName string, Id string, nextLocation types.Location)
 	if err != nil {
 		tx.Rollback()
 		return fmt.Errorf("error nulling unit at old location: %v", err)
-	}
-
-	// Update the player's location in the characters table
-	_, err = tx.Exec(`
-        UPDATE characters
-        SET locationX = ?, locationY = ?
-        WHERE id = ?;
-    `, nextLocation.X, nextLocation.Y, Id)
-	if err != nil {
-		tx.Rollback()
-		return fmt.Errorf("error updating player location in characters table: %v", err)
 	}
 
 	// Update the unit field at the new location in the tiles table
@@ -198,4 +229,64 @@ func UpdatePlayerLocation(dbName string, Id string, nextLocation types.Location)
 	}
 
 	return nil
+}
+
+func SyncPlayers(connectedPlayers map[string]*websocket.Conn, mutex *sync.Mutex) {
+	// Iterate over the connected players
+	for playerID, conn := range connectedPlayers {
+
+		// Open the database
+		db, err := sql.Open("sqlite3", "gameGrid.db")
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer db.Close()
+
+		// Prepare the SQL statement
+		stmt, err := db.Prepare("SELECT locationX, locationY FROM tiles WHERE unit = ?")
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer stmt.Close()
+
+		// Execute the SQL statement
+		row := stmt.QueryRow(playerID)
+
+		// Get the player's location
+		var locationX, locationY int
+		err = row.Scan(&locationX, &locationY)
+		if err != nil {
+			if err == sql.ErrNoRows {
+				log.Printf("Player %s not found in the database", playerID)
+			} else {
+				log.Printf("Error getting location for player %s: %v", playerID, err)
+			}
+			continue
+		}
+
+		// Run the GetTilesInRange function
+		tiles, err := GetTilesInRange("gameGrid.db", locationX, locationY, 5, 5)
+
+		// Create the response payload
+		payload := types.SyncMessagePayload{
+			Tiles: tiles,
+		}
+
+		if err != nil {
+			log.Printf("Error sending results: %v", err)
+		}
+
+		// Use a mutex to ensure that only one goroutine writes to the WebSocket connection at a time
+		mutex.Lock()
+		err = conn.WriteJSON(types.SyncMessage{
+			Type:    "SyncPlayers",
+			Payload: payload,
+		})
+		mutex.Unlock()
+
+		if err != nil {
+			log.Printf("No connected players")
+			continue
+		}
+	}
 }

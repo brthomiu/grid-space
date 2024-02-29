@@ -19,11 +19,10 @@ type UnitStats struct {
 }
 
 type Unit struct {
-	Id       string
-	Type     string
-	Name     string
-	Stats    UnitStats
-	Location Location
+	Id    string
+	Type  string
+	Name  string
+	Stats UnitStats
 }
 
 type Tile struct {
@@ -49,8 +48,8 @@ type GetPlayerMapMessage struct {
 }
 
 type MoveMessage struct {
-	Id           string
-	NextLocation Location
+	Id        string
+	Direction string
 }
 
 type MoveMessagePayload struct {
@@ -77,6 +76,11 @@ type CharacterCreationMessagePayload struct {
 	Name string
 }
 
+type CharacterCreationObject struct {
+	UnitObj  Unit
+	Location Location
+}
+
 type CharacterCreationResponse struct {
 	Type    string
 	Payload CharacterCreationResponsePayload
@@ -84,4 +88,14 @@ type CharacterCreationResponse struct {
 
 type CharacterCreationResponsePayload struct {
 	CharacterObject Unit
+	Location        Location
+}
+
+type SyncMessage struct {
+	Type    string
+	Payload SyncMessagePayload
+}
+
+type SyncMessagePayload struct {
+	Tiles []Tile
 }

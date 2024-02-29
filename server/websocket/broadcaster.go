@@ -1,4 +1,4 @@
-// websocket/broadcaster.go
+// broadcaster.go
 package websocket
 
 import (
