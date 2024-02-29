@@ -77,17 +77,12 @@ export const useUpdatePlayerLocation = (
           "newCharacterObject new character websocket hook, -----",
           newCharacterObject
         );
-        if (!newCharacterResponse.Payload.Location) {
-          throw Error(
-            "Could not update client location with new character starting position."
-          );
-        } else {
-          console.log(
-            "new character location on client---->",
-            newCharacterResponse.Payload.Location
-          );
-          setCurrentLocation(newCharacterResponse.Payload.Location);
-        }
+
+        console.log(
+          "new character location on client---->",
+          newCharacterResponse.Payload.Location
+        );
+        setCurrentLocation(newCharacterResponse.Payload.Location);
       }
     }
 
