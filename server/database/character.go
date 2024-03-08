@@ -271,7 +271,8 @@ func SyncPlayers(connectedPlayers map[string]*websocket.Conn, mutex *sync.Mutex)
 
 		// Create the response payload
 		payload := types.SyncMessagePayload{
-			Tiles: tiles,
+			PlayerId: playerID,
+			Tiles:    tiles,
 		}
 
 		if err != nil {

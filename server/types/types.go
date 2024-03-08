@@ -97,5 +97,6 @@ type SyncMessage struct {
 }
 
 type SyncMessagePayload struct {
-	Tiles []Tile
+	PlayerId string
+	Tiles    []Tile
 }
