@@ -5,7 +5,6 @@ import Grid from "./grid/Grid";
 import { Tile, Unit, Location } from "../types/types";
 import Controls from "./ui/Controls";
 import { usePingServer, useUpdatePlayerLocation } from "../hooks/webSocket";
-// import { useCreateCharacter } from "../hooks/character";
 import { Login } from "./ui/Login";
 
 const WebSocketConnection = () => {
@@ -14,8 +13,8 @@ const WebSocketConnection = () => {
   >();
 
   // Change from localhost to heroku before deploying
-  // const socketUrl = "ws://localhost:8080/ws";
-  const socketUrl = "wss://grid-server-live-d5aba022ae2f.herokuapp.com/ws";
+  const socketUrl = "ws://localhost:8080/ws";
+  // const socketUrl = "wss://grid-server-live-d5aba022ae2f.herokuapp.com/ws";
 
   const { lastMessage, readyState, sendMessage } = useWebSocket(socketUrl);
 

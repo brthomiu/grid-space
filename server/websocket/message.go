@@ -21,7 +21,7 @@ func handleIncomingMessages(conn *websocket.Conn) {
 	})
 
 	// Create a ticker that fires every second (or whatever your desired tickrate is)
-	ticker := time.NewTicker(time.Millisecond * 200)
+	ticker := time.NewTicker(time.Millisecond * 100)
 	defer ticker.Stop()
 
 	go func() {

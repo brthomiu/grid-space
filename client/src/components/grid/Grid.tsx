@@ -1,12 +1,13 @@
 import React from "react";
 import Tile from "../tiles/Tile";
 import { Tile as TTile, Location } from "../../types/types";
-import { config } from "../../config/config";
 
 type Props = {
   grid: TTile[];
   currentLocation: Location | null | undefined;
 };
+
+const tileSize = 12
 
 // Functional component representing a grid of tiles.
 const Grid: React.FC<Props> = ({ grid, currentLocation }) => {
@@ -21,7 +22,7 @@ const Grid: React.FC<Props> = ({ grid, currentLocation }) => {
       <div
         className="grid"
         style={{
-          gridTemplateColumns: `repeat(${11}, ${config.tileSize * 4}px)`,
+          gridTemplateColumns: `repeat(${11}, ${tileSize * 4}px)`,
         }}
       >
         {/* Map through the generated tiles and render each Tile component */}

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { useState } from "react";
 import { Unit } from "../../types/types";
-import { sendCharacterCreationmessage } from "../../api/api";
+import { sendCharacterCreationMessage } from "../../api/api";
 import { SendMessage } from "react-use-websocket";
 
 type Props = {
@@ -22,7 +22,7 @@ export const Login = ({ characterObject, sendMessage }: Props) => {
     if (nameInput.length == 0) {
       throw Error("Please enter a name!");
     } else {
-      sendCharacterCreationmessage(nameInput, sendMessage);
+      sendCharacterCreationMessage(nameInput, sendMessage);
     }
   };
 

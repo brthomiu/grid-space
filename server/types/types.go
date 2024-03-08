@@ -8,14 +8,20 @@ type Grid struct {
 	Size int
 }
 
+type Tile struct {
+	Location Location
+	Resource Resource
+	Unit     string
+}
+
 type Location struct {
 	X, Y int
 }
 
-type UnitStats struct {
-	Health  int
-	Attack  int
-	Defense int
+type Resource struct {
+	Type     string
+	Quantity int
+	Quality  int
 }
 
 type Unit struct {
@@ -25,16 +31,10 @@ type Unit struct {
 	Stats UnitStats
 }
 
-type Tile struct {
-	Location Location
-	Resource Resource
-	Unit     string
-}
-
-type Resource struct {
-	Type     string
-	Quantity int
-	Quality  int
+type UnitStats struct {
+	Health  int
+	Attack  int
+	Defense int
 }
 
 type Message struct {

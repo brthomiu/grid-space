@@ -57,7 +57,7 @@ export const createCharacterCreationMessage = (Name: string) => {
   return characterCreationMessage;
 };
 
-export const sendCharacterCreationmessage = (
+export const sendCharacterCreationMessage = (
   name: string,
   sendMessage: SendMessage
 ) => {
