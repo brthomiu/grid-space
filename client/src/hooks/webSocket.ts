@@ -29,7 +29,7 @@ export const useUpdatePlayerLocation = (
 
       console.log("messageData--------------", messageData);
 
-      if (messageData.Type === "SyncPlayer") {
+      if (messageData.Type === "SyncPlayers") {
         if (!characterObject || typeof characterObject == "undefined") {
           throw Error(
             "SyncPlayer hook characterObject is either null or undefined"
