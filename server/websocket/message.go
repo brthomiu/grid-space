@@ -12,7 +12,7 @@ import (
 )
 
 // Create a buffered channel to store incoming requests
-var requests = make(chan types.Message, 500)
+var requests = make(chan types.Message, 10)
 
 func handleIncomingMessages(conn *websocket.Conn) {
 	conn.SetPingHandler(func(appData string) error {
@@ -130,28 +130,28 @@ func handleMovePlayer(conn *websocket.Conn, msg types.MoveMessage) {
 		return
 	}
 
-	// Get all tiles within a 5x5 range of the new location
-	tiles, err := database.GetTilesInRange("gameGrid.db", NextLocation.X, NextLocation.Y, 5, 5)
-	if err != nil {
-		// Handle the error
-		log.Printf("Error getting tiles in range: %v", err)
-		return
-	}
+	// // Get all tiles within a 5x5 range of the new location
+	// tiles, err := database.GetTilesInRange("gameGrid.db", NextLocation.X, NextLocation.Y, 5, 5)
+	// if err != nil {
+	// 	// Handle the error
+	// 	log.Printf("Error getting tiles in range: %v", err)
+	// 	return
+	// }
 
-	// Create the response payload
-	payload := types.MoveMessagePayload{
-		Tiles:        tiles,
-		NextLocation: NextLocation,
-	}
+	// // Create the response payload
+	// payload := types.MoveMessagePayload{
+	// 	Tiles:        tiles,
+	// 	NextLocation: NextLocation,
+	// }
 
-	// Send the response back to the client
-	err = conn.WriteJSON(types.MoveMessageResponse{
-		Type:    "MovePlayer",
-		Payload: payload,
-	})
-	if err != nil {
-		log.Printf("Error sending results: %v", err)
-	}
+	// // Send the response back to the client
+	// err = conn.WriteJSON(types.MoveMessageResponse{
+	// 	Type:    "MovePlayer",
+	// 	Payload: payload,
+	// })
+	// if err != nil {
+	// 	log.Printf("Error sending results: %v", err)
+	// }
 }
 
 func handleCharacterCreation(conn *websocket.Conn, msg types.CharacterCreationMessagePayload, connectedPlayers map[string]*websocket.Conn) {

@@ -37,12 +37,12 @@ func HandleWebSocketConnection(w http.ResponseWriter, r *http.Request) {
 	defer closeConnection(conn)
 
 	// // Get the player's ID from the request (you'll need to replace this with your own logic)
-	// playerID := r.URL.Query().Get("playerID")
+	playerID := r.URL.Query().Get("playerID")
 
 	// // Store the connection and player's ID in the connectedPlayers map
-	// mutex.Lock()
-	// connectedPlayers[playerID] = conn
-	// mutex.Unlock()
+	mutex.Lock()
+	connectedPlayers[playerID] = conn
+	mutex.Unlock()
 
 	// Handle incoming messages
 	handleIncomingMessages(conn)

@@ -235,6 +235,8 @@ func SyncPlayers(connectedPlayers map[string]*websocket.Conn, mutex *sync.Mutex)
 	// Iterate over the connected players
 	for playerID, conn := range connectedPlayers {
 
+		log.Println("playerID from connectedPlayers map------->", playerID)
+
 		// Open the database
 		db, err := sql.Open("sqlite3", "gameGrid.db")
 		if err != nil {
@@ -278,10 +280,12 @@ func SyncPlayers(connectedPlayers map[string]*websocket.Conn, mutex *sync.Mutex)
 
 		// Use a mutex to ensure that only one goroutine writes to the WebSocket connection at a time
 		mutex.Lock()
+
 		err = conn.WriteJSON(types.SyncMessage{
 			Type:    "SyncPlayers",
 			Payload: payload,
 		})
+
 		mutex.Unlock()
 
 		if err != nil {
