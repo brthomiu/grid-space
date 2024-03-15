@@ -51,5 +51,16 @@ func HandleWebSocketConnection(w http.ResponseWriter, r *http.Request) {
 func closeConnection(conn *websocket.Conn) {
 	conn.Close()
 	clients.Delete(conn)
+
+	// Remove the connection from the connectedPlayers map
+	mutex.Lock()
+	for id, connection := range connectedPlayers {
+		if connection == conn {
+			delete(connectedPlayers, id)
+			break
+		}
+	}
+	mutex.Unlock()
+
 	log.Println("WebSocket connection closed.")
 }
