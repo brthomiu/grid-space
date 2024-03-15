@@ -30,10 +30,21 @@ export const useUpdatePlayerLocation = (
       console.log("messageData--------------", messageData);
 
       if (messageData.Type === "SyncPlayers") {
+        if (!messageData.Payload.PlayerId) {
+          return;
+        }
+
         if (!characterObject || typeof characterObject == "undefined") {
-          throw Error(
+          // throw Error(
+          //   "SyncPlayer hook characterObject is either null or undefined"
+          // );
+          return console.log(
             "SyncPlayer hook characterObject is either null or undefined"
           );
+        }
+
+        if (messageData.Payload.PlayerId != characterObject.Id) {
+          return;
         }
 
         setCurrentMap(messageData.Payload.Tiles); // Update the state with the received tiles
@@ -63,6 +74,12 @@ export const useUpdatePlayerLocation = (
       }
 
       if (messageData.Type === "CharacterCreationResponse") {
+        if (characterObject != null && characterObject != undefined) {
+          return console.log(
+            "Received extraneous CharacterCreationResponse - characterObject already exists!"
+          );
+        }
+
         const newCharacterResponse: CharacterCreationResponse = messageData;
 
         const newCharacterObject = {

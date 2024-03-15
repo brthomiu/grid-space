@@ -9,14 +9,12 @@ type Props = {
 };
 
 // Functional component representing an individual tile in the grid.
-const Tile: React.FC<Props> = ({ tile, currentLocation, unitId }) => {
+const Tile: React.FC<Props> = ({ tile, unitId }) => {
   // Extract the location from the tile object
   const { Location, Resource } = tile;
 
   const tileBg = (ResourceType: string) => {
-    if (Location.X == currentLocation.X && Location.Y == currentLocation.Y) {
-      return "bg-green-600";
-    } else {
+    
       switch (ResourceType) {
         case "Wood": {
           return "bg-orange-800";
@@ -32,7 +30,7 @@ const Tile: React.FC<Props> = ({ tile, currentLocation, unitId }) => {
           return "bg-black";
         }
       }
-    }
+    
   };
 
   // Render the tile component with a fixed size and a border
@@ -45,9 +43,7 @@ const Tile: React.FC<Props> = ({ tile, currentLocation, unitId }) => {
       {/* Display the coordinates of the tile */}
       {`(${Location.X}, ${Location.Y})`}
       <div className="flex flex-row">
-      {unitId && (
-        <h1 className="text-[1rem]">🙂</h1>
-      )}
+        {unitId && <h1 className="text-[1rem]">🙂</h1>}
       </div>
     </div>
   );
