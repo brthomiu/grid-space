@@ -1,7 +1,7 @@
 # Grid-Space: A Concurrent Multiplayer Web Application
 
 <img src="gridGifSmall.gif" />
-_Demo of concurrency between two separate clients._
+<em>Demo of concurrency between two separate clients.</em>
 
 ## Overview
 Grid-Space is a full-stack concurrent multiplayer web application designed for interactive gaming experiences. It leverages Go's powerful concurrency features to manage real-time communication between the server and multiple clients via websockets.
