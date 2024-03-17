@@ -30,19 +30,21 @@ export const Login = ({ characterObject, sendMessage }: Props) => {
     return null;
   } else {
     return (
-      <div>
-        <h2>TEST: {nameInput}</h2>
-        <input
-          maxLength={16}
-          type="text"
-          id="name"
-          value={nameInput}
-          placeholder="Pick a Name"
-          onChange={onChange}
-        />
-        <button onClick={() => submitForm()} className="text-blue-300">
-          Submit
-        </button>
+      <div className="flex flex-col max-w-72 gap-2 mt-4">
+        <h2 className="text-white">New Character</h2>
+        <div className="flex flex-row gap-4">
+          <input
+            maxLength={16}
+            type="text"
+            id="name"
+            value={nameInput}
+            placeholder="Pick a Name"
+            onChange={onChange}
+          />
+          <button onClick={() => submitForm()} className="text-blue-300">
+            Submit
+          </button>
+        </div>
       </div>
     );
   }

@@ -179,6 +179,11 @@ func GetPlayerLocation(dbName string, Id string) (types.Location, error) {
 }
 
 func UpdatePlayerLocation(dbName string, Id string, nextLocation types.Location) error {
+	// Check if the new location contains a negative coordinate
+	if nextLocation.X < 0 || nextLocation.Y < 0 {
+		return nil
+	}
+
 	// Open a connection to the SQLite database
 	db, err := OpenDatabase(dbName)
 	if err != nil {

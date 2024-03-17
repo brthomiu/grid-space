@@ -10,6 +10,9 @@ import (
 func CreateGrid(size int) [][]types.Tile {
 	rand.Seed(time.Now().UnixNano())
 
+	// Adjust the size to account for the negative coordinates
+	size += 5
+
 	// Create a 2D slice representing the grid
 	grid := make([][]types.Tile, size)
 	for i := range grid {
@@ -17,11 +20,19 @@ func CreateGrid(size int) [][]types.Tile {
 	}
 
 	// Populate the grid with tiles
-	for x := 0; x < size; x++ {
-		for y := 0; y < size; y++ {
-			grid[x][y] = types.Tile{
-				Location: types.Location{X: x, Y: y},
-				Resource: GenerateRandomResource(),
+	for x := -5; x < size-5; x++ {
+		for y := -5; y < size-5; y++ {
+			// If the coordinates are negative, assign a "None" resource
+			if x < 0 || y < 0 {
+				grid[x+5][y+5] = types.Tile{
+					Location: types.Location{X: x, Y: y},
+					Resource: types.Resource{Type: "None", Quantity: 0, Quality: 0},
+				}
+			} else {
+				grid[x+5][y+5] = types.Tile{
+					Location: types.Location{X: x, Y: y},
+					Resource: GenerateRandomResource(),
+				}
 			}
 		}
 	}

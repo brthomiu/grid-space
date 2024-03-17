@@ -16,18 +16,21 @@ export default function Controls({ sendMessage, characterObject }: Props) {
   return (
     characterObject && (
       <>
-        <h1 className="text-white">GRID-SPACE v0.1</h1>
-        <p className="text-white">Press a direction to begin.</p>
-        <div className="text-red-100 flex gap-4">
-          <button onClick={() => handleMoveUp(characterObject, sendMessage)}>
-            Up
-          </button>
-          <button onClick={() => handleMoveDown(characterObject, sendMessage)}>
-            Down
-          </button>
+        <p className="text-white mb-4">Press a direction to move.</p>
+        <div className="text-red-100 flex gap-8">
           <button onClick={() => handleMoveLeft(characterObject, sendMessage)}>
             Left
           </button>
+          <div className="flex flex-col gap-8">
+            <button onClick={() => handleMoveUp(characterObject, sendMessage)}>
+              Up
+            </button>
+            <button
+              onClick={() => handleMoveDown(characterObject, sendMessage)}
+            >
+              Down
+            </button>
+          </div>
           <button onClick={() => handleMoveRight(characterObject, sendMessage)}>
             Right
           </button>

@@ -41,7 +41,7 @@ const Tile: React.FC<Props> = ({ tile, unitId }) => {
       )} border-gray-300 text-black`}
     >
       {/* Display the coordinates of the tile */}
-      {`(${Location.X}, ${Location.Y})`}
+      {`(${Location.Y}, ${Location.X})`}
       <div className="flex flex-row">
         {unitId && <h1 className="text-[1rem]">🙂</h1>}
       </div>
