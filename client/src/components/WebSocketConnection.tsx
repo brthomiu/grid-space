@@ -13,8 +13,8 @@ const WebSocketConnection = () => {
   >();
 
   // Change from localhost to heroku before deploying
-  const socketUrl = "ws://localhost:8080/ws";
-  // const socketUrl = "wss://grid-server-live-d5aba022ae2f.herokuapp.com/ws";
+  // const socketUrl = "ws://localhost:8080/ws";
+  const socketUrl = "wss://grid-server-live-d5aba022ae2f.herokuapp.com/ws";
 
   const { lastMessage, readyState, sendMessage } = useWebSocket(socketUrl);
 
