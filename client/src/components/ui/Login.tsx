@@ -30,7 +30,7 @@ export const Login = ({ characterObject, sendMessage }: Props) => {
     return null;
   } else {
     return (
-      <div className="flex flex-col justify-start max-w-72 gap-2 mt-4">
+      <div className="mt-4 flex max-w-72 flex-col justify-start gap-2">
         <h2 className="text-white">New Character</h2>
         <div className="flex flex-col justify-start gap-4">
           <input
@@ -40,11 +40,11 @@ export const Login = ({ characterObject, sendMessage }: Props) => {
             value={nameInput}
             placeholder="Pick a Name"
             onChange={onChange}
-            className="text-black bg-indigo-600 border-2 border-lime-300 rounded p-1"
+            className="rounded border-2 border-lime-300 bg-indigo-600 p-1 text-black"
           />
           <button
             onClick={() => submitForm()}
-            className="px-2 py-1 rounded-lg text-lime-300 border border-lime-500 bg-lime-950 hover:border-lime-400 hover:text-lime-200"
+            className="rounded-lg border border-lime-500 bg-lime-950 px-2 py-1 text-lime-300 hover:border-lime-400 hover:text-lime-200"
           >
             Submit
           </button>

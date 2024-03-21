@@ -7,7 +7,7 @@ type Props = {
   currentLocation: Location | null | undefined;
 };
 
-const tileSize = 12
+const tileSize = 12;
 
 // Functional component representing a grid of tiles.
 const Grid: React.FC<Props> = ({ grid, currentLocation }) => {

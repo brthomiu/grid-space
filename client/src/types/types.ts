@@ -68,6 +68,6 @@ export type CharacterCreationResponse = {
 };
 
 export type CharacterCreationResponsePayload = {
-  CharacterObject: Unit
-  Location: Location
+  CharacterObject: Unit;
+  Location: Location;
 };

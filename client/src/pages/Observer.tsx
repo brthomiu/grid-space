@@ -1,7 +1,5 @@
 const Observer = () => {
-  return (
-    <div>Observer</div>
-  )
-}
+  return <div>Observer</div>;
+};
 
-export default Observer
+export default Observer;

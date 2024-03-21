@@ -18,7 +18,7 @@ export const playerMapMessage = (playerId: string, location: Location) => {
 
 export const createMoveMessage = (
   Id: string,
-  Direction: string
+  Direction: string,
 ): MoveMessage | Error => {
   if (!Id) {
     throw Error("Movement failed: No player ID!");
@@ -35,14 +35,14 @@ export const createMoveMessage = (
       Direction,
     },
   };
-  console.log("Sending movement message to server---->", moveMessage)
+  console.log("Sending movement message to server---->", moveMessage);
   return moveMessage;
 };
 
 export const sendMoveMessage = (
   id: string,
   direction: string,
-  sendMessage: SendMessage
+  sendMessage: SendMessage,
 ) => {
   sendMessage(JSON.stringify(createMoveMessage(id, direction)));
 };
@@ -59,7 +59,7 @@ export const createCharacterCreationMessage = (Name: string) => {
 
 export const sendCharacterCreationMessage = (
   name: string,
-  sendMessage: SendMessage
+  sendMessage: SendMessage,
 ) => {
   const messageObject = createCharacterCreationMessage(name);
   const message = JSON.stringify(messageObject);

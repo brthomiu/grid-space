@@ -18,27 +18,24 @@ const Tile: React.FC<Props> = ({ tile, unitId }) => {
   const { Location, Resource } = tile;
 
   const tileBg = (ResourceType: string) => {
-    
-      switch (ResourceType) {
-        case "Wood": {
-          return "bg-green-950";
-        }
-        case "Stone": {
-          return "bg-orange-950";
-        }
-        case "Ore": {
-          return "bg-slate-600";
-        }
-        default: {
-          // Return a default value for unknown ResourceType
-          return "bg-transparent";
-        }
+    switch (ResourceType) {
+      case "Wood": {
+        return "bg-green-950";
       }
-    
+      case "Stone": {
+        return "bg-orange-950";
+      }
+      case "Ore": {
+        return "bg-slate-600";
+      }
+      default: {
+        // Return a default value for unknown ResourceType
+        return "bg-transparent";
+      }
+    }
   };
 
   const tileImg = (ResourceType: string) => {
-    
     switch (ResourceType) {
       case "Wood": {
         return wood;
@@ -54,26 +51,23 @@ const Tile: React.FC<Props> = ({ tile, unitId }) => {
         return city;
       }
     }
-  
-};
+  };
 
   // Render the tile component with a fixed size and a border
   return (
     <div
-      className={`text-[0.6rem] w-12 h-12 m-0 border ${tileBg(
-        Resource.Type
+      className={`m-0 h-12 w-12 border text-[0.6rem] ${tileBg(
+        Resource.Type,
       )} border-gray-300 text-black`}
     >
       {/* Display the coordinates of the tile */}
-      <div className="absolute m-auto text-xs text-lime-300 bg-black">{`${Location.Y}, ${Location.X}`}</div>
+      <div className="absolute m-auto bg-black text-xs text-lime-300">{`${Location.Y}, ${Location.X}`}</div>
 
       <div className="absolute m-auto">
         {unitId && <h1 className="text-[2rem]">🙂</h1>}
       </div>
 
       <img src={tileImg(Resource.Type)} alt={Resource.Type} />
-
-
     </div>
   );
 };

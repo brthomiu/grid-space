@@ -13,8 +13,8 @@ const WebSocketConnection = () => {
   >();
 
   // Change from localhost to heroku before deploying
-  // const socketUrl = "ws://localhost:8080/ws";
-  const socketUrl = "wss://grid-server-live-d5aba022ae2f.herokuapp.com/ws";
+  const socketUrl = "ws://localhost:8080/ws";
+  // const socketUrl = "wss://grid-server-live-d5aba022ae2f.herokuapp.com/ws";
 
   const { lastMessage, readyState, sendMessage } = useWebSocket(socketUrl);
 
@@ -30,31 +30,34 @@ const WebSocketConnection = () => {
     setCharacterObject,
     setCurrentLocation,
     setCurrentMap,
-    lastMessage
+    lastMessage,
   );
 
   usePingServer(readyState, sendMessage);
 
   return (
-    <div className="bg-black lg:px-24 lg:py-8 min-h-96 rounded-2xl border-2 bg-opacity-75 border-lime-300 border-opacity-80">
+    <div className="min-h-96 rounded-2xl border-2 border-lime-300 border-opacity-80 bg-black bg-opacity-75 lg:px-24 lg:py-8">
       {ReadyState[readyState] == "CLOSED" && (
-        <p className="text-red-600 mb-4">No response from server.</p>
+        <p className="mb-4 text-red-600">No response from server.</p>
       )}
       {ReadyState[readyState] == "CONNECTING" && (
-        <p className="text-yellow-300 mb-4">
+        <p className="mb-4 text-yellow-300">
           The server is starting - please wait.
         </p>
       )}
       {ReadyState[readyState] == "OPEN" && (
-        <p className="text-green-500 mb-4">Connected to server.</p>
+        <p className="mb-4 text-green-500">Connected to server.</p>
       )}
       <div className="flex flex-col justify-center">
         {currentMap && characterObject && (
           <Grid grid={currentMap} currentLocation={currentLocation} />
         )}
-<div className="m-auto">
-        <Controls sendMessage={sendMessage} characterObject={characterObject} />
-        <Login characterObject={characterObject} sendMessage={sendMessage} />
+        <div className="m-auto">
+          <Controls
+            sendMessage={sendMessage}
+            characterObject={characterObject}
+          />
+          <Login characterObject={characterObject} sendMessage={sendMessage} />
         </div>
       </div>
     </div>

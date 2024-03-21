@@ -42,7 +42,7 @@ const Welcome = (props: Props) => {
   };
 
   const submitForm = (
-    setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>
+    setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>,
   ) => {
     if (nameInput.length == 0) {
       throw Error("Please enter a name!");
@@ -53,11 +53,11 @@ const Welcome = (props: Props) => {
   };
 
   return (
-    <div className="bg-black border-lime-300 border-2 border-opacity-80 p-8 rounded-2xl bg-opacity-75">
-      <h2 className="text-lime-300 font-bold">WELCOME TO GRID-SPACE</h2>
-      <div className="my-4 w-56 flex flex-col gap-4 text-black">
+    <div className="rounded-2xl border-2 border-lime-300 border-opacity-80 bg-black bg-opacity-75 p-8">
+      <h2 className="font-bold text-lime-300">WELCOME TO GRID-SPACE</h2>
+      <div className="my-4 flex w-56 flex-col gap-4 text-black">
         <input
-          className="text-black bg-indigo-600 border-2 border-lime-300 rounded p-1"
+          className="rounded border-2 border-lime-300 bg-indigo-600 p-1 text-black"
           maxLength={16}
           type="text"
           id="name"
@@ -66,7 +66,7 @@ const Welcome = (props: Props) => {
           onChange={onChangeName}
         />
         <input
-          className="text-black bg-indigo-600 border-2 border-lime-300 rounded p-1"
+          className="rounded border-2 border-lime-300 bg-indigo-600 p-1 text-black"
           maxLength={16}
           type="text"
           id="password"
@@ -75,22 +75,22 @@ const Welcome = (props: Props) => {
           onChange={onChangePassword}
         />
       </div>
-      <div className="flex flex-row gap-4 justify-around">
+      <div className="flex flex-row justify-around gap-4">
         <button
           onClick={() => submitForm(setIsAuthenticated)}
-          className="px-2 py-1 rounded-lg text-cyan-300 border border-cyan-500 bg-cyan-950 hover:border-cyan-400 hover:text-cyan-200"
+          className="rounded-lg border border-cyan-500 bg-cyan-950 px-2 py-1 text-cyan-300 hover:border-cyan-400 hover:text-cyan-200"
         >
           Login
         </button>
         <button
           onClick={() => submitForm(setIsAuthenticated)}
-          className="px-2 py-1 rounded-lg text-purple-300 border border-purple-500 bg-purple-950 hover:border-purple-400 hover:text-purple-200"
+          className="rounded-lg border border-purple-500 bg-purple-950 px-2 py-1 text-purple-300 hover:border-purple-400 hover:text-purple-200"
         >
           Register
         </button>
         <button
           onClick={() => submitForm(setIsAuthenticated)}
-          className="px-2 py-1 rounded-lg text-rose-300 border border-rose-500 bg-rose-950 hover:rose-purple-400 hover:text-rose-200"
+          className="hover:rose-purple-400 rounded-lg border border-rose-500 bg-rose-950 px-2 py-1 text-rose-300 hover:text-rose-200"
         >
           Reset
         </button>

@@ -135,10 +135,10 @@ function AudioPlayer() {
     <>
       {currentSong && (
         <div className="flex flex-row">
-          <div className="flex flex-col mr-2">
-            <div className="flex flex-row justify-start ml-2 mb-1">
-              <h3 className="text-purple-500 font-semibold">Current Song:</h3>
-              <h3 className="text-violet-300 ml-1">
+          <div className="mr-2 flex flex-col">
+            <div className="mb-1 ml-2 flex flex-row justify-start">
+              <h3 className="font-semibold text-purple-500">Current Song:</h3>
+              <h3 className="ml-1 text-violet-300">
                 &nbsp;{currentSong.title}
               </h3>
             </div>
@@ -157,7 +157,7 @@ function AudioPlayer() {
 
             <div className="flex flex-row gap-4">
               <input
-                className="appearance-none bg-indigo-500 h-2 m-2 w-56"
+                className="m-2 h-2 w-56 appearance-none bg-indigo-500"
                 type="range"
                 min="0"
                 max={duration || 0}
@@ -180,7 +180,7 @@ function AudioPlayer() {
             </div>
           </div>
           <input
-            className="appearance-none bg-lime-400 w-16 h-1 mt-6 -rotate-90 scale-75"
+            className="mt-6 h-1 w-16 -rotate-90 scale-75 appearance-none bg-lime-400"
             type="range"
             min="0"
             max="1"

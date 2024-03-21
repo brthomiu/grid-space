@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  background: rgb(0,0,0);
-  color: rgb(255,255,255);
+  background: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
   font-family: "Kode Mono", monospace;
 }

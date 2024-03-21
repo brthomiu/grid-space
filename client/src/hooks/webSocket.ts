@@ -18,7 +18,7 @@ export const useUpdatePlayerLocation = (
     React.SetStateAction<Location | null | undefined>
   >,
   setCurrentMap: React.Dispatch<React.SetStateAction<Tile[] | undefined>>,
-  lastMessage: MessageEvent<any> | null
+  lastMessage: MessageEvent<any> | null,
 ) => {
   useEffect(() => {
     console.log("Entering useEffect"); // Check if the effect is being triggered
@@ -39,7 +39,7 @@ export const useUpdatePlayerLocation = (
           //   "SyncPlayer hook characterObject is either null or undefined"
           // );
           return console.log(
-            "SyncPlayer hook characterObject is either null or undefined"
+            "SyncPlayer hook characterObject is either null or undefined",
           );
         }
 
@@ -53,7 +53,7 @@ export const useUpdatePlayerLocation = (
       if (messageData.Type === "MovePlayer") {
         if (!characterObject || typeof characterObject == "undefined") {
           throw Error(
-            "useUpdatePlayerLocation hook characterObject is either null or undefined"
+            "useUpdatePlayerLocation hook characterObject is either null or undefined",
           );
         }
 
@@ -67,7 +67,7 @@ export const useUpdatePlayerLocation = (
         setCharacterObject(newCharacterObject);
         console.log(
           "newCharacterObject location updated websocket hook, -----",
-          newCharacterObject
+          newCharacterObject,
         );
         setCurrentLocation(messageData.Payload.NextLocation); // Update player location on client
         setCurrentMap(messageData.Payload.Tiles); // Update the state with the received tiles
@@ -76,7 +76,7 @@ export const useUpdatePlayerLocation = (
       if (messageData.Type === "CharacterCreationResponse") {
         if (characterObject != null && characterObject != undefined) {
           return console.log(
-            "Received extraneous CharacterCreationResponse - characterObject already exists!"
+            "Received extraneous CharacterCreationResponse - characterObject already exists!",
           );
         }
 
@@ -92,12 +92,12 @@ export const useUpdatePlayerLocation = (
         setCharacterObject(newCharacterObject);
         console.log(
           "newCharacterObject new character websocket hook, -----",
-          newCharacterObject
+          newCharacterObject,
         );
 
         console.log(
           "new character location on client---->",
-          newCharacterResponse.Payload.Location
+          newCharacterResponse.Payload.Location,
         );
         setCurrentLocation(newCharacterResponse.Payload.Location);
       }
