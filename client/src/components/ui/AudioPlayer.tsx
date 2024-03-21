@@ -3,10 +3,8 @@
 import { GiNextButton, GiPlayButton, GiPauseButton } from "react-icons/gi";
 import { useState, useRef, useEffect } from "react";
 import loop from "../../../assets/terminal.mp3";
-import loop2 from "../../../assets/pushStart.mp3";
-import loop3 from "../../../assets/switchboard.mp3";
-import loop4 from "../../../assets/gravityDrop.mp3";
-import loop5 from "../../../assets/dropSchema.mp3";
+import loop2 from "../../../assets/switchboard.mp3";
+import loop3 from "../../../assets/gravityDrop.mp3";
 
 function AudioPlayer() {
   // Type definition for song object
@@ -18,10 +16,8 @@ function AudioPlayer() {
   // Playlist Object
   const playlist: Song[] = [
     { title: "Terminal", file: loop },
-    { title: "Push Start", file: loop2 },
-    { title: "Switchboard", file: loop3 },
-    { title: "Gravity", file: loop4 },
-    { title: "Drop Schema", file: loop5 },
+    { title: "Switchboard", file: loop2 },
+    { title: "Gravity", file: loop3 },
   ];
 
   // Length of playlist
@@ -52,7 +48,7 @@ function AudioPlayer() {
   const [togglePlayNewTrack, setTogglePlayNewTrack] = useState<boolean>(false);
 
   // State to store volume of player
-  const [volume, setVolume] = useState(0.5); // Volume is between 0 and 1
+  const [volume, setVolume] = useState(0.3); // Volume is between 0 and 1
 
   // Function to cycle through tracks
   const nextSong = () => {

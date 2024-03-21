@@ -4,7 +4,7 @@ import Welcome from "./pages/Welcome";
 import Navbar from "./components/ui/Navbar";
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const tiltRef = useRef(null); // Create a ref for the div
 
@@ -15,7 +15,7 @@ function App() {
       const handleMouseMove = (event: MouseEvent) => {
         const { clientX, clientY } = event;
         const { innerWidth: width, innerHeight: height } = window;
-        const tiltKey = 20; // Reduce this to make the tilt less dramatic
+        const tiltKey = 15; // Reduce this to make the tilt less dramatic
         const tiltX = ((clientY / height) - 0.5) * tiltKey * 2;
         const tiltY = ((clientX / width) - 0.5) * -tiltKey * 2;
         tiltElement.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;

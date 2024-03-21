@@ -40,6 +40,7 @@ export const Login = ({ characterObject, sendMessage }: Props) => {
             value={nameInput}
             placeholder="Pick a Name"
             onChange={onChange}
+            className="text-black"
           />
           <button onClick={() => submitForm()} className="text-blue-300">
             Submit

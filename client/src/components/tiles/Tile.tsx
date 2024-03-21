@@ -1,5 +1,9 @@
 import React from "react";
 import { Tile as TileType, Location } from "../../types/types";
+import wood from "../../../assets/tree.svg";
+import stone from "../../../assets/rock.svg";
+import ore from "../../../assets/metal.svg";
+import city from "../../../assets/city.svg";
 
 type Props = {
   // The tile object containing location information.
@@ -17,21 +21,41 @@ const Tile: React.FC<Props> = ({ tile, unitId }) => {
     
       switch (ResourceType) {
         case "Wood": {
-          return "bg-orange-800";
+          return "bg-green-950";
         }
         case "Stone": {
-          return "bg-gray-400";
+          return "bg-orange-950";
         }
         case "Ore": {
-          return "bg-slate-500";
+          return "bg-slate-600";
         }
         default: {
           // Return a default value for unknown ResourceType
-          return "bg-black";
+          return "bg-transparent";
         }
       }
     
   };
+
+  const tileImg = (ResourceType: string) => {
+    
+    switch (ResourceType) {
+      case "Wood": {
+        return wood;
+      }
+      case "Stone": {
+        return stone;
+      }
+      case "Ore": {
+        return ore;
+      }
+      default: {
+        // Return a default value for unknown ResourceType
+        return city;
+      }
+    }
+  
+};
 
   // Render the tile component with a fixed size and a border
   return (
@@ -41,10 +65,15 @@ const Tile: React.FC<Props> = ({ tile, unitId }) => {
       )} border-gray-300 text-black`}
     >
       {/* Display the coordinates of the tile */}
-      {`(${Location.Y}, ${Location.X})`}
-      <div className="flex flex-row">
-        {unitId && <h1 className="text-[1rem]">🙂</h1>}
+      <div className="absolute m-auto text-xs text-lime-300 bg-black">{`${Location.Y}, ${Location.X}`}</div>
+
+      <div className="absolute m-auto">
+        {unitId && <h1 className="text-[2rem]">🙂</h1>}
       </div>
+
+      <img src={tileImg(Resource.Type)} alt={Resource.Type} />
+
+
     </div>
   );
 };
