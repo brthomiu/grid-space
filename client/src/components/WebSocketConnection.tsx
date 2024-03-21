@@ -36,22 +36,22 @@ const WebSocketConnection = () => {
   usePingServer(readyState, sendMessage);
 
   return (
-    <div className="m-12">
+    <div className="bg-black lg:px-24 lg:py-8 min-h-96 rounded-2xl border-2 bg-opacity-75 border-lime-300 border-opacity-80">
       <h1 className="text-white">GRID-SPACE v0.2</h1>
-        {ReadyState[readyState] == "CLOSED" && (
-          <p className="text-red-600 mb-4">No response from server.</p>
-        )}
-        {ReadyState[readyState] == "CONNECTING" && (
-          <p className="text-yellow-300 mb-4">
-            The server is starting - please wait.
-          </p>
-        )}
-        {ReadyState[readyState] == "OPEN" && (
-          <p className="text-green-500 mb-4">Connected to server.</p>
-        )}
-        {currentMap && characterObject && (
-          <Grid grid={currentMap} currentLocation={currentLocation} />
-        )}
+      {ReadyState[readyState] == "CLOSED" && (
+        <p className="text-red-600 mb-4">No response from server.</p>
+      )}
+      {ReadyState[readyState] == "CONNECTING" && (
+        <p className="text-yellow-300 mb-4">
+          The server is starting - please wait.
+        </p>
+      )}
+      {ReadyState[readyState] == "OPEN" && (
+        <p className="text-green-500 mb-4">Connected to server.</p>
+      )}
+      {currentMap && characterObject && (
+        <Grid grid={currentMap} currentLocation={currentLocation} />
+      )}
       <Controls sendMessage={sendMessage} characterObject={characterObject} />
       <Login characterObject={characterObject} sendMessage={sendMessage} />
     </div>
