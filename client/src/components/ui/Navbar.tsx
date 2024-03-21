@@ -3,13 +3,13 @@ import AudioPlayer from "./AudioPlayer";
 
 const Navbar = () => {
   return (
-    <div className="fixed top-0 z-50 flex h-16 w-full flex-col bg-black lg:h-24">
+    <div className="fixed top-0 z-50 flex h-24  w-full flex-col bg-black lg:h-24">
       <img
-        className="my-4 h-8 justify-center lg:h-16"
+        className="my-3 h-6 justify-center lg:my-4 lg:h-16"
         src={gridSpaceTitle}
         alt="Grid-Space"
       />
-      <div className="absolute right-0 top-0 m-4 flex flex-row gap-4">
+      <div className="fixed top-0 ml-4 mt-10 flex scale-75 flex-row gap-4 self-center lg:absolute lg:right-0 lg:ml-0 lg:mt-5 lg:scale-100">
         <AudioPlayer />
       </div>
     </div>

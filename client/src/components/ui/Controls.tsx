@@ -50,7 +50,12 @@ export default function Controls({ sendMessage, characterObject }: Props) {
   return (
     characterObject && (
       <div className="flex flex-col justify-center">
-        <h3 className="mt-4">Use WASD or the arrow keys to move.</h3>
+        <h3 className="invisible mt-4 lg:visible">
+          Use WASD or the arrow keys to move.
+        </h3>
+        <h3 className="visible -mt-14 lg:invisible lg:mt-0">
+          Touch the arrows to move.
+        </h3>
         <div className="mt-6 flex justify-center gap-8 text-red-100">
           <button
             className="scale-x-150 text-2xl font-bold text-lime-300"

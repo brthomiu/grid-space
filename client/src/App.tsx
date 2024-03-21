@@ -30,7 +30,7 @@ function App() {
   }, []);
 
   return (
-    <>
+    <div className="overflow-hidden lg:overflow-auto">
       <Navbar />
       <div className="mt-24 h-full w-full">
         <div
@@ -47,7 +47,7 @@ function App() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

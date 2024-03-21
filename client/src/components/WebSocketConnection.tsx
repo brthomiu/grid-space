@@ -36,7 +36,7 @@ const WebSocketConnection = () => {
   usePingServer(readyState, sendMessage);
 
   return (
-    <div className="min-h-96 rounded-2xl border-2 border-lime-300 border-opacity-80 bg-black bg-opacity-75 lg:px-24 lg:py-8">
+    <div className="min-h-72 w-80 rounded-2xl border-2 border-lime-300 border-opacity-80 bg-black bg-opacity-75 p-4 lg:min-h-96 lg:w-full lg:px-24 lg:py-8">
       {ReadyState[readyState] == "CLOSED" && (
         <p className="mb-4 text-red-600">No response from server.</p>
       )}

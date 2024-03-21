@@ -18,9 +18,9 @@ const Grid: React.FC<Props> = ({ grid, currentLocation }) => {
 
   // Render the grid component with CSS Grid layout
   return (
-    <div>
+    <div className="self-center -mt-40 lg:mb-0 lg:mt-0 -mb-20">
       <div
-        className="grid"
+        className="grid lg:scale-100 scale-[.625]"
         style={{
           gridTemplateColumns: `repeat(${11}, ${tileSize * 4}px)`,
         }}
