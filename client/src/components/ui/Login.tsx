@@ -30,9 +30,9 @@ export const Login = ({ characterObject, sendMessage }: Props) => {
     return null;
   } else {
     return (
-      <div className="flex flex-col max-w-72 gap-2 mt-4">
+      <div className="flex flex-col justify-start max-w-72 gap-2 mt-4">
         <h2 className="text-white">New Character</h2>
-        <div className="flex flex-row gap-4">
+        <div className="flex flex-col justify-start gap-4">
           <input
             maxLength={16}
             type="text"
@@ -40,9 +40,12 @@ export const Login = ({ characterObject, sendMessage }: Props) => {
             value={nameInput}
             placeholder="Pick a Name"
             onChange={onChange}
-            className="text-black"
+            className="text-black bg-indigo-600 border-2 border-lime-300 rounded p-1"
           />
-          <button onClick={() => submitForm()} className="text-blue-300">
+          <button
+            onClick={() => submitForm()}
+            className="px-2 py-1 rounded-lg text-lime-300 border border-lime-500 bg-lime-950 hover:border-lime-400 hover:text-lime-200"
+          >
             Submit
           </button>
         </div>

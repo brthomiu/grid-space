@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { SendMessage } from 'react-use-websocket';
 import {
   handleMoveUp,
@@ -49,8 +49,9 @@ export default function Controls({ sendMessage, characterObject }: Props) {
 
   return (
     characterObject && (
-      <>
-        <div className="text-red-100 flex gap-8 mt-6">
+      <div className="flex flex-col justify-center">
+      <h3 className="mt-4">Use WASD or the arrow keys to move.</h3>
+        <div className="text-red-100 flex justify-center gap-8 mt-6">
           <button className="scale-x-150 font-bold text-2xl text-lime-300" onClick={() => handleMoveLeft(characterObject, sendMessage)}>
             {`<`}
           </button>
@@ -69,7 +70,7 @@ export default function Controls({ sendMessage, characterObject }: Props) {
             {`>`}
           </button>
         </div>
-      </>
+      </div>
     )
   );
 }

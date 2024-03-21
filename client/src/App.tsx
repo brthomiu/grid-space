@@ -4,7 +4,7 @@ import Welcome from "./pages/Welcome";
 import Navbar from "./components/ui/Navbar";
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   const tiltRef = useRef(null); // Create a ref for the div
 
