@@ -107,7 +107,9 @@ const WebSocketConnection = () => {
         </div>
         <div className="flex flex-col justify-center">
           {currentMap && characterObject && (
+            <div className="scale-[.95]">
             <Grid grid={currentMap} currentLocation={currentLocation} />
+            </div>
           )}
           <div className="m-auto">
             <Controls
