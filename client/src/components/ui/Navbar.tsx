@@ -5,7 +5,7 @@ const Navbar = () => {
   return (
     <div className="fixed top-0 z-50 flex h-24  w-full flex-col bg-black lg:h-24">
       <img
-        className="my-3 h-6 justify-center lg:my-4 lg:h-16"
+        className="my-3 h-6 justify-center lg:my-6 lg:h-10 xl:my-4 xl:h-16"
         src={gridSpaceTitle}
         alt="Grid-Space"
       />

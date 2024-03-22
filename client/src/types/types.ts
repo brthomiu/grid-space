@@ -71,3 +71,9 @@ export type CharacterCreationResponsePayload = {
   CharacterObject: Unit;
   Location: Location;
 };
+
+export type LoadingStyles = {
+  center: string,
+  sides: string,
+  content: string,
+}

@@ -1,5 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
+// AudioPlayer.tsx - Custom audio player component
 import { GiNextButton, GiPlayButton, GiPauseButton } from "react-icons/gi";
 import { useState, useRef, useEffect } from "react";
 import loop from "../../../assets/terminal.mp3";
@@ -133,7 +135,9 @@ function AudioPlayer() {
 
   return (
     <>
+      {/* Audio Player only renders if currentSong exists */}
       {currentSong && (
+        // Song title
         <div className="flex flex-row">
           <div className="mr-2 flex flex-col">
             <div className="mb-1 ml-2 flex flex-row justify-start">
@@ -143,6 +147,7 @@ function AudioPlayer() {
               </h3>
             </div>
 
+            {/* Hidden audio player element manipulated with custom buttons */}
             <audio
               className="hidden"
               ref={audioRef}
@@ -155,6 +160,7 @@ function AudioPlayer() {
               <source src={currentSong.file} />
             </audio>
 
+            {/* Range input for audio tracking */}
             <div className="flex flex-row gap-4">
               <input
                 className="m-2 h-2 w-56 appearance-none bg-indigo-500"
@@ -171,6 +177,7 @@ function AudioPlayer() {
                 }}
               />
 
+              {/* Play/Pause/Next buttons */}
               <button onClick={togglePlay}>
                 {isPlaying ? <GiPauseButton /> : <GiPlayButton />}
               </button>
@@ -179,6 +186,8 @@ function AudioPlayer() {
               </button>
             </div>
           </div>
+
+          {/* Range input for volume control */}
           <input
             className="mt-6 h-1 w-16 -rotate-90 scale-75 appearance-none bg-lime-400"
             type="range"
