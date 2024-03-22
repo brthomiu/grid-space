@@ -44,7 +44,7 @@ function App() {
           style={{ backgroundSize: "7.5%" }}
           className="relative flex h-full w-full justify-center bg-[url('../assets/gridBG.svg')] bg-fixed bg-repeat"
         >
-          <div ref={tiltRef} className="m-8 lg:mx-48 lg:my-12">
+          <div ref={tiltRef} className="m-8 lg:mx-48 lg:my-4">
             {!isAuthenticated && (
               <div className="h-48 lg:h-96">
                 <Welcome setIsAuthenticated={setIsAuthenticated} />

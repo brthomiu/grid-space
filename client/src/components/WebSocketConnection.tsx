@@ -83,13 +83,13 @@ const WebSocketConnection = () => {
       </div>
       <div
         style={{ transition: "all 2s" }}
-        className={`${createLoadingStyles(readyState).center} min-h-72 w-80 rounded-2xl border-2 border-opacity-80 bg-black bg-opacity-75 p-4 lg:min-h-96 lg:w-auto lg:min-w-[420px] lg:px-24 lg:py-8`}
+        className={`${createLoadingStyles(readyState).center} min-h-72 w-80 rounded-2xl border-2 border-opacity-80 bg-black bg-opacity-75 p-4 lg:min-h-96 lg:w-auto lg:min-w-[420px] lg:px-24 lg:py-4`}
       >
         <div className="m-auto flex h-12 max-w-[300px] flex-row justify-center self-center">
-          {ReadyState[readyState] == "CLOSED" && (
+          {ReadyState[readyState] == "CLOSED" && !characterObject && (
             <p className="my-2 max-w-[300px] text-red-600">No connection.</p>
           )}
-          {ReadyState[readyState] == "CONNECTING" && (
+          {ReadyState[readyState] == "CONNECTING" && !characterObject && (
             <div className="absolute flex flex-col justify-center">
               <p className="my-2 max-w-[300px] text-yellow-300">
                 Connecting to server.
@@ -99,7 +99,7 @@ const WebSocketConnection = () => {
               </div>
             </div>
           )}
-          {ReadyState[readyState] == "OPEN" && (
+          {ReadyState[readyState] == "OPEN" && !characterObject && (
             <p className="my-2 max-w-[300px] text-green-500">
               Connected to server.
             </p>

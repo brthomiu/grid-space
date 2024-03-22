@@ -46,7 +46,7 @@ export default function RotateCube(props: Props) {
   }
 
   return (
-    <div className="self-center" style={{ width: "200px", height: "200px" }}>
+    <div className="self-center invisible lg:visible" style={{ width: "200px", height: "200px" }}>
       <Canvas>
         <directionalLight
           position={[-10, 30, 10]}
