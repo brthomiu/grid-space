@@ -23,7 +23,7 @@ const LeftBar = (props: Props) => {
       >
         {!characterObject && ReadyState[readyState] != "CLOSED" && (
           <div className="my-auto ml-[44px] flex flex-row justify-center">
-            <RotateCube />
+            <RotateCube propMultiplier={1} />
           </div>
         )}
 

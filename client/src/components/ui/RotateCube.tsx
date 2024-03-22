@@ -2,43 +2,49 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { useRef, useState } from "react";
 import { Mesh } from "three";
 
-function MyRotatingBox() {
-  const myMesh = useRef<Mesh>(null!);
-  const [doubleClicked, setDoubleClicked] = useState(false);
-  const [multiplier, setMultiplier] = useState(1);
+type Props = {
+  propMultiplier: number;
+};
 
-  const width = 2 * multiplier;
-  const length = 2 * multiplier;
-  const depth = 2 * multiplier;
+export default function RotateCube(props: Props) {
+  const { propMultiplier } = props;
 
-  useFrame(({ clock }) => {
-    const a = clock.getElapsedTime() * 0.7;
-    myMesh.current.rotation.x = a / 2;
-    myMesh.current.rotation.y = a / 3;
-  });
+  function MyRotatingBox() {
+    const myMesh = useRef<Mesh>(null!);
+    const [doubleClicked, setDoubleClicked] = useState(false);
+    const [multiplier, setMultiplier] = useState(propMultiplier);
 
-  return (
-    <mesh
-      ref={myMesh}
-      onDoubleClick={() => {
-        if (doubleClicked) {
-          setDoubleClicked(false);
-          console.log("unDoubleClick");
-          setMultiplier(1);
-        } else {
-          setDoubleClicked(true);
-          console.log("doubleClick");
-          setMultiplier(1.5);
-        }
-      }}
-    >
-      <boxGeometry args={[length, width, depth]} />
-      <meshPhongMaterial color="white" />
-    </mesh>
-  );
-}
+    const width = 2 * multiplier;
+    const length = 2 * multiplier;
+    const depth = 2 * multiplier;
 
-export default function RotateCube() {
+    useFrame(({ clock }) => {
+      const a = clock.getElapsedTime() * 0.7;
+      myMesh.current.rotation.x = a / 2;
+      myMesh.current.rotation.y = a / 3;
+    });
+
+    return (
+      <mesh
+        ref={myMesh}
+        onDoubleClick={() => {
+          if (doubleClicked) {
+            setDoubleClicked(false);
+            console.log("unDoubleClick");
+            setMultiplier(1);
+          } else {
+            setDoubleClicked(true);
+            console.log("doubleClick");
+            setMultiplier(1.5);
+          }
+        }}
+      >
+        <boxGeometry args={[length, width, depth]} />
+        <meshPhongMaterial color="white" />
+      </mesh>
+    );
+  }
+
   return (
     <div className="self-center" style={{ width: "200px", height: "200px" }}>
       <Canvas>

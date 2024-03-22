@@ -9,11 +9,12 @@ import { usePingServer, useUpdatePlayerLocation } from "../hooks/webSocket";
 import { Login } from "./ui/Login";
 import LeftBar from "./ui/LeftBar";
 import RightBar from "./ui/RightBar";
+import RotateCube from "./ui/RotateCube";
 
 const WebSocketConnection = () => {
   // Server URL - Change from localhost to heroku before deploying
-  const socketUrl = "ws://localhost:8080/ws";
-  // const socketUrl = "wss://grid-server-live-d5aba022ae2f.herokuapp.com/ws";
+  // const socketUrl = "ws://localhost:8080/ws";
+  const socketUrl = "wss://grid-server-live-d5aba022ae2f.herokuapp.com/ws";
 
   const [characterObject, setCharacterObject] = useState<
     Unit | null | undefined
@@ -86,15 +87,20 @@ const WebSocketConnection = () => {
       >
         <div className="m-auto flex h-12 max-w-[300px] flex-row justify-center self-center">
           {ReadyState[readyState] == "CLOSED" && (
-            <p className="mb-4 max-w-[300px] text-red-600">No connection.</p>
+            <p className="my-2 max-w-[300px] text-red-600">No connection.</p>
           )}
           {ReadyState[readyState] == "CONNECTING" && (
-            <p className="mb-4 max-w-[300px] text-yellow-300">
-              Connecting to server.
-            </p>
+            <div className="absolute flex flex-col justify-center">
+              <p className="my-2 max-w-[300px] text-yellow-300">
+                Connecting to server.
+              </p>
+              <div className="scale-100">
+              <RotateCube propMultiplier={1.75} />
+              </div>
+            </div>
           )}
           {ReadyState[readyState] == "OPEN" && (
-            <p className="mb-4 max-w-[300px] text-green-500">
+            <p className="my-2 max-w-[300px] text-green-500">
               Connected to server.
             </p>
           )}
