@@ -15,7 +15,7 @@ type Props = {
 // Functional component representing an individual tile in the grid.
 const Tile: React.FC<Props> = ({ tile, unitId }) => {
   // Extract the location from the tile object
-  const { Location, Resource } = tile;
+  const { Resource } = tile;
 
   const tileBg = (ResourceType: string) => {
     switch (ResourceType) {
@@ -60,9 +60,6 @@ const Tile: React.FC<Props> = ({ tile, unitId }) => {
         Resource.Type,
       )} border-gray-300 text-black`}
     >
-      {/* Display the coordinates of the tile */}
-      <div className="absolute m-auto bg-black text-xs text-lime-300">{`${Location.Y}, ${Location.X}`}</div>
-
       <div className="absolute m-auto">
         {unitId && <h1 className="text-[2rem]">🙂</h1>}
       </div>

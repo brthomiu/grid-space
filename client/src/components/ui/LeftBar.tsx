@@ -29,11 +29,14 @@ const LeftBar = (props: Props) => {
 
         {characterObject && (
           <div>
-            <h3>One</h3>
-            <h3>Two</h3>
-            <h3>Three</h3>
-            <h3>Four</h3>
-            <h3>Five</h3>
+            <h3 className="m-auto mb-1">Name</h3>
+            <div className="text-lime-300">{`${characterObject.Name}`} </div>
+            <h3 className="m-auto mt-6 mb-1">Health</h3>
+            <div className="text-red-500">{`${characterObject.Stats.Health}`} </div>
+            <h3 className="m-auto mt-6 mb-1">Attack</h3>
+            <div className="text-indigo-400">{`${characterObject.Stats.Attack}`} </div>
+            <h3 className="m-auto mt-6 mb-1">Defense</h3>
+            <div className="text-indigo-400">{`${characterObject.Stats.Defense}`} </div>
           </div>
         )}
       </div>

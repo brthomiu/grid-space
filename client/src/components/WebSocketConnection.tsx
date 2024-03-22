@@ -13,8 +13,8 @@ import RotateCube from "./ui/RotateCube";
 
 const WebSocketConnection = () => {
   // Server URL - Change from localhost to heroku before deploying
-  // const socketUrl = "ws://localhost:8080/ws";
-  const socketUrl = "wss://grid-server-live-d5aba022ae2f.herokuapp.com/ws";
+  const socketUrl = "ws://localhost:8080/ws";
+  // const socketUrl = "wss://grid-server-live-d5aba022ae2f.herokuapp.com/ws";
 
   const [characterObject, setCharacterObject] = useState<
     Unit | null | undefined
@@ -134,6 +134,7 @@ const WebSocketConnection = () => {
           contentStyles={createLoadingStyles(readyState).content}
           characterObject={characterObject}
           readyState={readyState}
+          currentMap={currentMap}
         />
       </div>
     </div>
