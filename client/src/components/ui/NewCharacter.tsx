@@ -9,7 +9,7 @@ type Props = {
   sendMessage: SendMessage;
 };
 
-export const Login = ({ characterObject, sendMessage }: Props) => {
+export const NewCharacter = ({ characterObject, sendMessage }: Props) => {
   const [nameInput, setNameInput] = useState("");
 
   // Function to handle form string input
@@ -22,7 +22,8 @@ export const Login = ({ characterObject, sendMessage }: Props) => {
     if (nameInput.length == 0) {
       throw Error("Please enter a name!");
     } else {
-      sendCharacterCreationMessage(nameInput, sendMessage);
+      const newId = `${nameInput}-${Date.now().toString()}`;
+      sendCharacterCreationMessage(newId, nameInput, sendMessage);
     }
   };
 

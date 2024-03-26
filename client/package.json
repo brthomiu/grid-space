@@ -13,6 +13,7 @@
   "dependencies": {
     "@react-three/fiber": "^8.15.19",
     "@types/bcryptjs": "^2.4.6",
+    "axios": "^1.6.8",
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",

@@ -6,15 +6,18 @@ import Grid from "./grid/Grid";
 import { Tile, Unit, Location, LoadingStyles } from "../types/types";
 import Controls from "./ui/Controls";
 import { usePingServer, useUpdatePlayerLocation } from "../hooks/webSocket";
-import { Login } from "./ui/Login";
+import { NewCharacter } from "./ui/NewCharacter";
 import LeftBar from "./ui/LeftBar";
 import RightBar from "./ui/RightBar";
 import RotateCube from "./ui/RotateCube";
 
+export const serverUrl = "localhost:8080";
+// export const serverUrl = "grid-server-live-d5aba022ae2f.herokuapp.com";
+
 const WebSocketConnection = () => {
   // Server URL - Change from localhost to heroku before deploying
-  const socketUrl = "ws://localhost:8080/ws";
-  // const socketUrl = "wss://grid-server-live-d5aba022ae2f.herokuapp.com/ws";
+  const socketUrl = `ws://${serverUrl}/ws`;
+  // const socketUrl = "wss://${socketUrl}/ws";
 
   const [characterObject, setCharacterObject] = useState<
     Unit | null | undefined
@@ -72,7 +75,7 @@ const WebSocketConnection = () => {
   };
 
   return (
-    <div className="flex flex-row">
+    <div className="flex flex-row lg:min-h-[445px]">
       <div className="invisible lg:visible">
         <LeftBar
           sideStyles={createLoadingStyles(readyState).sides}
@@ -95,7 +98,7 @@ const WebSocketConnection = () => {
                 Connecting to server.
               </p>
               <div className="scale-100">
-              <RotateCube propMultiplier={1.75} />
+                <RotateCube propMultiplier={1.75} />
               </div>
             </div>
           )}
@@ -108,7 +111,7 @@ const WebSocketConnection = () => {
         <div className="flex flex-col justify-center">
           {currentMap && characterObject && (
             <div className="scale-[.95]">
-            <Grid grid={currentMap} currentLocation={currentLocation} />
+              <Grid grid={currentMap} currentLocation={currentLocation} />
             </div>
           )}
           <div className="m-auto">
@@ -120,7 +123,7 @@ const WebSocketConnection = () => {
               style={{ transition: "all 2s" }}
               className={`${createLoadingStyles(readyState).content}`}
             >
-              <Login
+              <NewCharacter
                 characterObject={characterObject}
                 sendMessage={sendMessage}
               />

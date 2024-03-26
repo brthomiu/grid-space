@@ -3,7 +3,7 @@ import { Tile as TileType, Location } from "../../types/types";
 import wood from "../../../assets/tree.svg";
 import stone from "../../../assets/rock.svg";
 import ore from "../../../assets/metal.svg";
-import city from "../../../assets/city.svg";
+// import city from "../../../assets/city.svg";
 
 type Props = {
   // The tile object containing location information.
@@ -48,7 +48,7 @@ const Tile: React.FC<Props> = ({ tile, unitId }) => {
       }
       default: {
         // Return a default value for unknown ResourceType
-        return city;
+        return;
       }
     }
   };

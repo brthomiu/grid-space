@@ -59,6 +59,7 @@ export type CharacterCreationMessage = {
 };
 
 export type CharacterCreationMessagePayload = {
+  Id: string;
   Name: string;
 };
 
@@ -76,4 +77,13 @@ export type LoadingStyles = {
   center: string,
   sides: string,
   content: string,
+}
+
+export type GuestLoginMessage = {
+  Type: string;
+  Payload: GuestLoginMessagePayload;
+}
+
+export type GuestLoginMessagePayload = {
+  Name: string;
 }

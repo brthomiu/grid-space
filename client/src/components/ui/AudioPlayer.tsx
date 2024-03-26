@@ -13,13 +13,14 @@ function AudioPlayer() {
   type Song = {
     title: string;
     file: any;
+    bpm: number;
   };
 
   // Playlist Object
   const playlist: Song[] = [
-    { title: "Terminal", file: loop },
-    { title: "Switchboard", file: loop2 },
-    { title: "Gravity", file: loop3 },
+    { title: "Terminal", file: loop, bpm: 136 },
+    { title: "Switchboard", file: loop2, bpm: 120 },
+    { title: "Gravity", file: loop3, bpm: 90 },
   ];
 
   // Length of playlist
