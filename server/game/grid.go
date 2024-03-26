@@ -22,8 +22,8 @@ func CreateGrid(size int) [][]types.Tile {
 	// Populate the grid with tiles
 	for x := -5; x < size-5; x++ {
 		for y := -5; y < size-5; y++ {
-			// If the coordinates are negative, assign a "None" resource
-			if x < 0 || y < 0 {
+			// If the coordinates are out of bounds, assign a "None" resource
+			if x < 0 || y < 0 || x > size-11 || y > size-11 {
 				grid[x+5][y+5] = types.Tile{
 					Location: types.Location{X: x, Y: y},
 					Resource: types.Resource{Type: "None", Quantity: 0, Quality: 0},

@@ -3,11 +3,25 @@ package database
 import (
 	"database/sql"
 	"fmt"
+	"os"
 	"runtime"
 	"server/types"
+	"strconv"
 
 	_ "github.com/mattn/go-sqlite3"
 )
+
+// Generate grid size
+func GetGridSize() int {
+	// Get the grid size from the GRID_SIZE environment variable
+	gridSizeStr := os.Getenv("GRID_SIZE")
+	gridSize, err := strconv.Atoi(gridSizeStr)
+	if err != nil {
+		// Use a default value if GRID_SIZE is not set or is not a valid integer
+		gridSize = 50
+	}
+	return gridSize
+}
 
 // CreateTilesTable creates the table for storing tile data if it doesn't exist.
 func CreateTilesTable(db *sql.DB) error {

@@ -20,7 +20,7 @@ func handleIncomingMessages(conn *websocket.Conn) {
 		return conn.WriteControl(websocket.PongMessage, []byte{}, time.Now().Add(time.Second))
 	})
 
-	// Create a ticker that fires every second (or whatever your desired tickrate is)
+	// ticker - fires a tick at the specified increment
 	ticker := time.NewTicker(time.Millisecond * 100)
 	defer ticker.Stop()
 
@@ -54,9 +54,11 @@ func handleIncomingMessages(conn *websocket.Conn) {
 	}
 }
 
+// Function to handle incoming messages from clients
 func processMessage(conn *websocket.Conn, msg types.Message) {
 	// Process the message
 	switch msg.Type {
+	// Handle player movement message
 	case "MoveMessage":
 		var payload types.MoveMessage
 		if err := json.Unmarshal(msg.Payload, &payload); err != nil {
@@ -70,6 +72,7 @@ func processMessage(conn *websocket.Conn, msg types.Message) {
 		// Pass the recipient's connection to the handler function
 		handleMovePlayer(recipientConn, payload)
 
+		// Handle character creation - being deprecated and moved to a REST API
 	case "CharacterCreationMessage":
 		log.Println("payload from message------", msg.Payload)
 		var payload types.CharacterCreationMessagePayload
@@ -78,8 +81,8 @@ func processMessage(conn *websocket.Conn, msg types.Message) {
 			return
 		}
 
-		// Handle character creation and get the response message
-		response, err := handleCharacterCreation(conn, payload, connectedPlayers)
+		// Get the response message
+		response, err := handleCharacterCreation(conn, payload, connectedPlayers, payload.Id)
 		if err != nil {
 			log.Printf("Error handling character creation: %v", err)
 			return
@@ -94,53 +97,30 @@ func processMessage(conn *websocket.Conn, msg types.Message) {
 			log.Printf("Error sending results: %v", err)
 		}
 
-		// ...
+	case "ping": // Empty case to ignore ping messages
 
-	case "ping": // Ignore ping messages
+	// Log unknown messages
 	default:
 		log.Printf("Unknown message type: %v", msg.Type)
 	}
 }
 
-// func processMessage(conn *websocket.Conn, msg types.Message) {
-// 	// Process the message (i.e., the existing code in your switch statement)
-// 	switch msg.Type {
-// 	case "MoveMessage":
-// 		var payload types.MoveMessage
-// 		if err := json.Unmarshal(msg.Payload, &payload); err != nil {
-// 			log.Printf("Error decoding MoveMessage: %v", err)
-// 			return
-// 		}
-// 		handleMovePlayer(conn, payload)
-
-// 	case "CharacterCreationMessage":
-// 		log.Println("payload from message------", msg.Payload)
-// 		var payload types.CharacterCreationMessagePayload
-// 		if err := json.Unmarshal(msg.Payload, &payload); err != nil {
-// 			log.Printf("Error decoding MoveMessage: %v", err)
-// 			return
-// 		}
-// 		handleCharacterCreation(conn, payload, connectedPlayers)
-
-// 	case "ping": // Ignore ping messages
-// 	default:
-// 		log.Printf("Unknown message type: %v", msg.Type)
-// 	}
-// }
-
+// Handler function to sync players with database
 func handleSyncPlayers(connectedPlayers map[string]*websocket.Conn) {
 	database.SyncPlayers(connectedPlayers, mutex)
 }
 
-func handleMovePlayer(conn *websocket.Conn, msg types.MoveMessage) {
+// Function to handle player movement
+func handleMovePlayer(_ *websocket.Conn, msg types.MoveMessage) {
 	// Extract player Id and new location from the message
 	Id := msg.Id
 	Direction := msg.Direction
 
-	// Validate movement direction
+	// Validate movement direction - ||| TODO |||
+	// Also need to prevent players from moving out of bounds of the grid
+	// Need to get the grid size to here and use it
 
 	// Lookup current player location
-
 	NextLocation, err := database.GetPlayerLocation("gameGrid.db", Id)
 	log.Println(Id, NextLocation)
 	if err != nil {
@@ -150,7 +130,6 @@ func handleMovePlayer(conn *websocket.Conn, msg types.MoveMessage) {
 	}
 
 	// Update Location based on Direction
-
 	switch Direction {
 	case "up":
 		// Update NextLocation based on the "up" direction
@@ -169,7 +148,7 @@ func handleMovePlayer(conn *websocket.Conn, msg types.MoveMessage) {
 		log.Println("Invalid direction")
 	}
 
-	// Run your function with the playerId and location
+	// Run UpdatePlayerLocation with the playerId and location
 	err = database.UpdatePlayerLocation("gameGrid.db", Id, NextLocation)
 	log.Println(Id, NextLocation)
 	if err != nil {
@@ -180,7 +159,7 @@ func handleMovePlayer(conn *websocket.Conn, msg types.MoveMessage) {
 
 }
 
-func handleCharacterCreation(conn *websocket.Conn, msg types.CharacterCreationMessagePayload, connectedPlayers map[string]*websocket.Conn) (types.CharacterCreationResponse, error) {
+func handleCharacterCreation(conn *websocket.Conn, msg types.CharacterCreationMessagePayload, connectedPlayers map[string]*websocket.Conn, Id string) (types.CharacterCreationResponse, error) {
 	// Extract player Id and new location from the message
 	Name := msg.Name
 
@@ -188,8 +167,8 @@ func handleCharacterCreation(conn *websocket.Conn, msg types.CharacterCreationMe
 
 	log.Println("Name from message for character", Name)
 
-	// Run your function with the playerId and location
-	newCharacterObject, err := database.CreateCharacter("gameGrid.db", Name)
+	// Run CreateCharacter with the playerId and location
+	newCharacterObject, err := database.CreateCharacter("gameGrid.db", Id, Name)
 	if err != nil {
 		// Handle the error
 		log.Printf("Error creating character: %v", err)
@@ -218,43 +197,3 @@ func handleCharacterCreation(conn *websocket.Conn, msg types.CharacterCreationMe
 	// Return the response message
 	return response, nil
 }
-
-// func handleCharacterCreation(conn *websocket.Conn, msg types.CharacterCreationMessagePayload, connectedPlayers map[string]*websocket.Conn) {
-// 	// Extract player Id and new location from the message
-// 	Name := msg.Name
-
-// 	log.Println("Name message", msg)
-
-// 	log.Println("Name from message for character", Name)
-
-// 	// Run your function with the playerId and location
-// 	newCharacterObject, err := database.CreateCharacter("gameGrid.db", Name)
-// 	if err != nil {
-// 		// Handle the error
-// 		log.Printf("Error creating character: %v", err)
-// 		return
-// 	}
-
-// 	PlayerID := newCharacterObject.UnitObj.Id
-
-// 	// Store the connection and player's ID in the connectedPlayers map
-// 	mutex.Lock()
-// 	connectedPlayers[PlayerID] = conn
-// 	mutex.Unlock()
-// 	log.Println("connected", connectedPlayers)
-
-// 	// Create the response payload
-// 	payload := types.CharacterCreationResponsePayload{
-// 		CharacterObject: newCharacterObject.UnitObj,
-// 		Location:        newCharacterObject.Location,
-// 	}
-
-// 	// Send the response back to the client
-// 	err = conn.WriteJSON(types.CharacterCreationResponse{
-// 		Type:    "CharacterCreationResponse",
-// 		Payload: payload,
-// 	})
-// 	if err != nil {
-// 		log.Printf("Error sending results: %v", err)
-// 	}
-// }

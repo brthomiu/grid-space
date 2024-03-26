@@ -2,7 +2,6 @@ package database
 
 import (
 	"database/sql"
-	"encoding/hex"
 	"fmt"
 	"log"
 	"math/rand"
@@ -13,7 +12,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func CreateCharacter(dbName string, name string) (*types.CharacterCreationObject, error) {
+func CreateCharacter(dbName string, id string, name string) (*types.CharacterCreationObject, error) {
 	// Open a connection to the SQLite database
 	db, err := OpenDatabase(dbName)
 	if err != nil {
@@ -27,26 +26,18 @@ func CreateCharacter(dbName string, name string) (*types.CharacterCreationObject
 		return nil, err
 	}
 
-	// Generate a random id
-	idBytes := make([]byte, 16)
-	_, err = rand.Read(idBytes)
-	if err != nil {
-		return nil, fmt.Errorf("error generating id: %v", err)
-	}
-	id := hex.EncodeToString(idBytes)
-
 	// Default values
 	charType := "player"
 	statsHealth := 10
 	statsAttack := 3
 	statsDefense := 3
 
-	// Generate random locationX and locationY values between 1 and 20
-	locationX := rand.Intn(20) + 1
-	locationY := rand.Intn(20) + 1
+	// Generate random locationX and locationY values between 5 and 15
+	locationX := rand.Intn(10) + 6
+	locationY := rand.Intn(10) + 6
 
 	// Check the coordinates generated against the Tiles table
-	var unit string
+	var unit any
 	err = tx.QueryRow("SELECT unit FROM tiles WHERE locationX = ? AND locationY = ?", locationX, locationY).Scan(&unit)
 	if err != nil && err != sql.ErrNoRows {
 		tx.Rollback()
@@ -55,8 +46,8 @@ func CreateCharacter(dbName string, name string) (*types.CharacterCreationObject
 
 	// If there is already a unit there, generate new coordinates and try again
 	for unit != "" {
-		locationX = rand.Intn(20) + 1
-		locationY = rand.Intn(20) + 1
+		locationX := rand.Intn(10) + 6
+		locationY := rand.Intn(10) + 6
 		err = tx.QueryRow("SELECT unit FROM tiles WHERE locationX = ? AND locationY = ?", locationX, locationY).Scan(&unit)
 		if err != nil && err != sql.ErrNoRows {
 			tx.Rollback()
@@ -134,7 +125,7 @@ func CreateCharactersTable(dbName string) error {
 	CREATE TABLE IF NOT EXISTS characters (
 		id TEXT PRIMARY KEY,
 		type TEXT,
-		name TEXT UNIQUE,
+		name TEXT,
 		statsHealth INTEGER,
 		statsAttack INTEGER,
 		statsDefense INTEGER
@@ -179,8 +170,12 @@ func GetPlayerLocation(dbName string, Id string) (types.Location, error) {
 }
 
 func UpdatePlayerLocation(dbName string, Id string, nextLocation types.Location) error {
-	// Check if the new location contains a negative coordinate
+	// Checks for if the new location is out of bounds
+	gridSize := GetGridSize()
 	if nextLocation.X < 0 || nextLocation.Y < 0 {
+		return nil
+	}
+	if nextLocation.X > (gridSize-6) || nextLocation.Y > (gridSize-6) {
 		return nil
 	}
 
@@ -240,7 +235,7 @@ func SyncPlayers(connectedPlayers map[string]*websocket.Conn, mutex *sync.Mutex)
 	// Iterate over the connected players
 	for playerID, conn := range connectedPlayers {
 
-		log.Println("playerID from connectedPlayers map------->", playerID)
+		log.Println("playerIDs from connectedPlayers map------->", playerID)
 
 		// Open the database
 		db, err := sql.Open("sqlite3", "gameGrid.db")

@@ -2,9 +2,7 @@ package game
 
 import (
 	"fmt"
-	"os"
 	"server/database"
-	"strconv"
 	// "strings"
 )
 
@@ -19,13 +17,7 @@ func StartGameServer() {
 	if newGrid {
 		fmt.Println("Generating a new grid...")
 
-		// Get the grid size from the GRID_SIZE environment variable
-		gridSizeStr := os.Getenv("GRID_SIZE")
-		gridSize, err := strconv.Atoi(gridSizeStr)
-		if err != nil {
-			// Use a default value if GRID_SIZE is not set or is not a valid integer
-			gridSize = 50
-		}
+		gridSize := database.GetGridSize()
 
 		// Validate the grid size
 		if gridSize < 10 || gridSize > 1000 {

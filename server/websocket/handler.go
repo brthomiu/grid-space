@@ -14,7 +14,6 @@ import (
 // Global variables for broadcasting messages to all clients
 var (
 	broadcastChannel = make(chan types.Message, 500) // Channel for broadcasting messages to all clients
-	clients          sync.Map                        // Concurrent map to store client connections
 	mutex            = &sync.Mutex{}
 	connectedPlayers = make(map[string]*websocket.Conn) // Store IDs of connected players on server
 	upgrader         = websocket.Upgrader{              // Upgrader for upgrading HTTP connections to WebSocket
@@ -36,21 +35,12 @@ func HandleWebSocketConnection(w http.ResponseWriter, r *http.Request) {
 	// Ensure the connection is closed when the function returns
 	defer closeConnection(conn)
 
-	// // Get the player's ID from the request (you'll need to replace this with your own logic)
-	playerID := r.URL.Query().Get("playerID")
-
-	// // Store the connection and player's ID in the connectedPlayers map
-	mutex.Lock()
-	connectedPlayers[playerID] = conn
-	mutex.Unlock()
-
 	// Handle incoming messages
 	handleIncomingMessages(conn)
 }
 
 func closeConnection(conn *websocket.Conn) {
 	conn.Close()
-	clients.Delete(conn)
 
 	// Remove the connection from the connectedPlayers map
 	mutex.Lock()

@@ -73,6 +73,7 @@ type CharacterCreationMessage struct {
 }
 
 type CharacterCreationMessagePayload struct {
+	Id   string
 	Name string
 }
 
@@ -99,4 +100,13 @@ type SyncMessage struct {
 type SyncMessagePayload struct {
 	PlayerId string
 	Tiles    []Tile
+}
+
+type GuestLoginMessage struct {
+	Type    string
+	Payload GuestLoginMessagePayload
+}
+
+type GuestLoginMessagePayload struct {
+	Name string
 }
