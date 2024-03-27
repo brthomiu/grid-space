@@ -1,7 +1,7 @@
 # Grid-Space: A Concurrent Multiplayer Web Application
 
-<video src="wge.mp4"></video>
-<em>Demo of concurrency between two separate clients.</em>
+<img src="newConcurrentGif.gif">
+<em>Demo of concurrency between four separate clients.</em>
 
 ## Live Demonstration
 ### <strong>https://brthomiu.github.io/grid-space/</strong>
