@@ -74,7 +74,6 @@ func processMessage(conn *websocket.Conn, msg types.Message) {
 
 		// Handle character creation - being deprecated and moved to a REST API
 	case "CharacterCreationMessage":
-		log.Println("payload from message------", msg.Payload)
 		var payload types.CharacterCreationMessagePayload
 		if err := json.Unmarshal(msg.Payload, &payload); err != nil {
 			log.Printf("Error decoding MoveMessage: %v", err)
@@ -90,6 +89,7 @@ func processMessage(conn *websocket.Conn, msg types.Message) {
 
 		// Get the connection for the intended recipient
 		recipientConn := connectedPlayers[response.Payload.CharacterObject.Id]
+		log.Printf("Recipient connection: %v", recipientConn.RemoteAddr())
 
 		// Send the response to the intended recipient
 		err = recipientConn.WriteJSON(response)
@@ -116,13 +116,8 @@ func handleMovePlayer(_ *websocket.Conn, msg types.MoveMessage) {
 	Id := msg.Id
 	Direction := msg.Direction
 
-	// Validate movement direction - ||| TODO |||
-	// Also need to prevent players from moving out of bounds of the grid
-	// Need to get the grid size to here and use it
-
 	// Lookup current player location
 	NextLocation, err := database.GetPlayerLocation("gameGrid.db", Id)
-	log.Println(Id, NextLocation)
 	if err != nil {
 		// Handle the error
 		log.Println("Error moving player: could not lookup current player location", err)
@@ -150,7 +145,6 @@ func handleMovePlayer(_ *websocket.Conn, msg types.MoveMessage) {
 
 	// Run UpdatePlayerLocation with the playerId and location
 	err = database.UpdatePlayerLocation("gameGrid.db", Id, NextLocation)
-	log.Println(Id, NextLocation)
 	if err != nil {
 		// Handle the error
 		log.Printf("Error moving player: %v", err)
@@ -162,10 +156,6 @@ func handleMovePlayer(_ *websocket.Conn, msg types.MoveMessage) {
 func handleCharacterCreation(conn *websocket.Conn, msg types.CharacterCreationMessagePayload, connectedPlayers map[string]*websocket.Conn, Id string) (types.CharacterCreationResponse, error) {
 	// Extract player Id and new location from the message
 	Name := msg.Name
-
-	log.Println("Name message", msg)
-
-	log.Println("Name from message for character", Name)
 
 	// Run CreateCharacter with the playerId and location
 	newCharacterObject, err := database.CreateCharacter("gameGrid.db", Id, Name)
@@ -193,6 +183,8 @@ func handleCharacterCreation(conn *websocket.Conn, msg types.CharacterCreationMe
 		Type:    "CharacterCreationResponse",
 		Payload: payload,
 	}
+
+	log.Printf("creation response payload Id----- %v", payload.CharacterObject.Id)
 
 	// Return the response message
 	return response, nil

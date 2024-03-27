@@ -45,7 +45,7 @@ func HandleGuestLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Printf("POST to guest route: Type = %s, Name = %s", msg.Type, msg.Payload.Name)
+	// log.Printf("POST to guest route: Type = %s, Name = %s", msg.Type, msg.Payload.Name)
 
 	// Set the response status to 200 OK
 	w.WriteHeader(http.StatusOK)

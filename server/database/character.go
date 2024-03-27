@@ -55,8 +55,6 @@ func CreateCharacter(dbName string, id string, name string) (*types.CharacterCre
 		}
 	}
 
-	fmt.Println("character name on server-----------", name)
-
 	// Insert the new character into the database
 	_, err = tx.Exec(`
 		INSERT INTO characters (id, type, name, statsHealth, statsAttack, statsDefense)
@@ -235,7 +233,7 @@ func SyncPlayers(connectedPlayers map[string]*websocket.Conn, mutex *sync.Mutex)
 	// Iterate over the connected players
 	for playerID, conn := range connectedPlayers {
 
-		log.Println("playerIDs from connectedPlayers map------->", playerID)
+		// log.Println("playerIDs from connectedPlayers map------->", playerID)
 
 		// Open the database
 		db, err := sql.Open("sqlite3", "gameGrid.db")
