@@ -18,6 +18,7 @@ Fix the way the frontend renders.
 
     -> Rerender should be triggered by global ticks from the server
 
+Server should only execute the first message from each client per tick (no double dipping)
 
 # LONGLIST
 
@@ -32,20 +33,6 @@ Request the game map from the server right before the player reaches the edge of
 ## Result:
 
 This will reduce the number of server requests by a factor equivalent to the map size. It will also change the way the map scrolls with the current client-side map pagination logic - this could potentially be good or bad.
-
-
-# Establish a global tick-rate on server
-
-The server needs a global tick rate.
-
-## Proposal:
-
-Establish a 1 second global tick on the server - messages from clients should pool asynchronously, execute functions on each tick, and send responses back to clients. Will need some panic handling and will need to figure out some type of client-side prediction or rollback mechanism to keep states in sync.
-
-## Result:
-
-This will make concurrent multiplayer possible by keeping all of the clients' gamestates in sync with the server.
-
 
 <!-- # ARCHIVES - FIXED ISSUES -->
 
@@ -75,3 +62,17 @@ Set up an intermittent ping/pong on the websocket to maintain the connection.
 ## Result:
 
 Connection to game server remains open even if player is idle. -->
+
+
+<!-- 
+# Establish a global tick-rate on server
+
+The server needs a global tick rate.
+
+## Proposal:
+
+Establish a 1 second global tick on the server - messages from clients should pool asynchronously, execute functions on each tick, and send responses back to clients. Will need some panic handling and will need to figure out some type of client-side prediction or rollback mechanism to keep states in sync.
+
+## Result:
+
+This will make concurrent multiplayer possible by keeping all of the clients' gamestates in sync with the server. -->

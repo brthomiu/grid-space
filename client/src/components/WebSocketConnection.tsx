@@ -17,7 +17,7 @@ export const serverUrl = "localhost:8080";
 const WebSocketConnection = () => {
   // Server URL - Change from localhost to heroku before deploying
   const socketUrl = `ws://${serverUrl}/ws`;
-  // const socketUrl = "wss://${socketUrl}/ws";
+  // const socketUrl = `wss://${serverUrl}/ws`;
 
   const [characterObject, setCharacterObject] = useState<
     Unit | null | undefined
