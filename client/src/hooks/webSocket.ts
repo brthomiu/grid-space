@@ -19,6 +19,8 @@ export const useUpdatePlayerLocation = (
   >,
   setCurrentMap: React.Dispatch<React.SetStateAction<Tile[] | undefined>>,
   lastMessage: MessageEvent<any> | null,
+  newCharacterId: string,
+  sendMessage: any,
 ) => {
   useEffect(() => {
     console.log("Entering useEffect"); // Check if the effect is being triggered
@@ -82,29 +84,34 @@ export const useUpdatePlayerLocation = (
 
         const newCharacterResponse: CharacterCreationResponse = messageData;
 
-        const newCharacterObject = {
-          Id: newCharacterResponse.Payload.CharacterObject.Id,
-          Name: newCharacterResponse.Payload.CharacterObject.Name,
-          Stats: newCharacterResponse.Payload.CharacterObject.Stats,
-          Type: newCharacterResponse.Payload.CharacterObject.Type,
-        };
+        if (newCharacterId != newCharacterResponse.Payload.CharacterObject.Id) {
+          sendMessage(JSON.stringify({ type: "ping" }));
+          return
+        } else {
+          const newCharacterObject = {
+            Id: newCharacterResponse.Payload.CharacterObject.Id,
+            Name: newCharacterResponse.Payload.CharacterObject.Name,
+            Stats: newCharacterResponse.Payload.CharacterObject.Stats,
+            Type: newCharacterResponse.Payload.CharacterObject.Type,
+          };
 
-        setCharacterObject(newCharacterObject);
-        console.log(
-          "newCharacterObject new character websocket hook, -----",
-          newCharacterObject,
-        );
+          setCharacterObject(newCharacterObject);
+          console.log(
+            "newCharacterObject new character websocket hook, -----",
+            newCharacterObject,
+          );
 
-        console.log(
-          "new character location on client---->",
-          newCharacterResponse.Payload.Location,
-        );
-        setCurrentLocation(newCharacterResponse.Payload.Location);
+          console.log(
+            "new character location on client---->",
+            newCharacterResponse.Payload.Location,
+          );
+          setCurrentLocation(newCharacterResponse.Payload.Location);
+        }
       }
     }
 
     console.log("Exiting useEffect");
-  }, [lastMessage]);
+  }, [lastMessage, newCharacterId, characterObject]);
 };
 
 export const usePingServer = (readyState: ReadyState, sendMessage: any) => {

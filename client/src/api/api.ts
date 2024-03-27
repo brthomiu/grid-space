@@ -94,7 +94,9 @@ export const sendCharacterCreationMessage = (
   id: string,
   name: string,
   sendMessage: SendMessage,
+  setNewCharacterId: React.Dispatch<React.SetStateAction<string>>,
 ) => {
+  setNewCharacterId(id);
   const messageObject = createCharacterCreationMessage(id, name);
   const message = JSON.stringify(messageObject);
   sendMessage(message);

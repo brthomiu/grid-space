@@ -6,53 +6,12 @@ import (
 	"log"
 	"server/database"
 	"server/types"
-	"time"
 
 	"github.com/gorilla/websocket"
 )
 
 // Create a buffered channel to store incoming requests
-var requests = make(chan types.Message, 10)
-
-func handleIncomingMessages(conn *websocket.Conn) {
-	conn.SetPingHandler(func(appData string) error {
-		// Send a pong in response to the ping
-		return conn.WriteControl(websocket.PongMessage, []byte{}, time.Now().Add(time.Second))
-	})
-
-	// ticker - fires a tick at the specified increment
-	ticker := time.NewTicker(time.Millisecond * 100)
-	defer ticker.Stop()
-
-	go func() {
-		for range ticker.C {
-			// At each tick, process all requests in the channel
-			if len(requests) > 0 {
-				for len(requests) > 0 {
-					msg := <-requests
-					processMessage(conn, msg)
-				}
-				// Call handleSyncPlayers after requests are processed
-				handleSyncPlayers(connectedPlayers)
-			}
-		}
-	}()
-
-	for {
-		var msg types.Message
-		err := conn.ReadJSON(&msg)
-		if err != nil {
-			log.Printf("Error reading message: %v", err)
-			if websocket.IsCloseError(err, websocket.CloseNormalClosure, websocket.CloseGoingAway) {
-				log.Println("WebSocket connection closed.")
-			}
-			return
-		}
-
-		// Instead of processing the message immediately, add it to the requests channel
-		requests <- msg
-	}
-}
+var requests = make(chan types.Message, 50)
 
 // Function to handle incoming messages from clients
 func processMessage(conn *websocket.Conn, msg types.Message) {
@@ -66,8 +25,10 @@ func processMessage(conn *websocket.Conn, msg types.Message) {
 			return
 		}
 
-		// Get the connection for the intended recipient
+		// Use mutex to safely access connectedPlayers
+		mutex.Lock()
 		recipientConn := connectedPlayers[payload.Id]
+		mutex.Unlock()
 
 		// Pass the recipient's connection to the handler function
 		handleMovePlayer(recipientConn, payload)
@@ -78,6 +39,15 @@ func processMessage(conn *websocket.Conn, msg types.Message) {
 		if err := json.Unmarshal(msg.Payload, &payload); err != nil {
 			log.Printf("Error decoding MoveMessage: %v", err)
 			return
+		}
+
+		// Use mutex to safely access connectedPlayers
+		mutex.Lock()
+		recipientConn := connectedPlayers[payload.Id]
+		mutex.Unlock()
+
+		if recipientConn != nil {
+			conn = recipientConn
 		}
 
 		// Get the response message
@@ -116,7 +86,7 @@ func processMessage(conn *websocket.Conn, msg types.Message) {
 
 // Handler function to sync players with database
 func handleSyncPlayers(connectedPlayers map[string]*websocket.Conn) {
-	database.SyncPlayers(connectedPlayers, mutex)
+	database.SyncPlayers(connectedPlayers)
 }
 
 // Function to handle player movement
@@ -174,6 +144,8 @@ func handleCharacterCreation(conn *websocket.Conn, msg types.CharacterCreationMe
 	}
 
 	PlayerID := newCharacterObject.UnitObj.Id
+
+	log.Printf("PlayerID: %s, conn: %p", PlayerID, conn)
 
 	// Store the connection and player's ID in the connectedPlayers map
 	mutex.Lock()

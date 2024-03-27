@@ -7,9 +7,14 @@ import { SendMessage } from "react-use-websocket";
 type Props = {
   characterObject: Unit | null | undefined;
   sendMessage: SendMessage;
+  setNewCharacterId: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export const NewCharacter = ({ characterObject, sendMessage }: Props) => {
+export const NewCharacter = ({
+  characterObject,
+  sendMessage,
+  setNewCharacterId,
+}: Props) => {
   const [nameInput, setNameInput] = useState("");
 
   // Function to handle form string input
@@ -23,7 +28,12 @@ export const NewCharacter = ({ characterObject, sendMessage }: Props) => {
       throw Error("Please enter a name!");
     } else {
       const newId = `${nameInput}-${Date.now().toString()}`;
-      sendCharacterCreationMessage(newId, nameInput, sendMessage);
+      sendCharacterCreationMessage(
+        newId,
+        nameInput,
+        sendMessage,
+        setNewCharacterId,
+      );
     }
   };
 

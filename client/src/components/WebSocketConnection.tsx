@@ -11,17 +11,20 @@ import LeftBar from "./ui/LeftBar";
 import RightBar from "./ui/RightBar";
 import RotateCube from "./ui/RotateCube";
 
-// export const serverUrl = "localhost:8080";
-export const serverUrl = "grid-server-live-d5aba022ae2f.herokuapp.com";
+export const serverUrl = "localhost:8080";
+const socketUrl = `ws://${serverUrl}/ws`;
+
+// const socketUrl = `wss://${serverUrl}/ws`;
+// export const serverUrl = "grid-server-live-d5aba022ae2f.herokuapp.com";
 
 const WebSocketConnection = () => {
   // Server URL - Change from localhost to heroku before deploying
-  // const socketUrl = `ws://${serverUrl}/ws`;
-  const socketUrl = `wss://${serverUrl}/ws`;
 
   const [characterObject, setCharacterObject] = useState<
     Unit | null | undefined
   >();
+
+  const [newCharacterId, setNewCharacterId] = useState<string>("");
 
   const { lastMessage, readyState, sendMessage } = useWebSocket(socketUrl);
 
@@ -38,6 +41,8 @@ const WebSocketConnection = () => {
     setCurrentLocation,
     setCurrentMap,
     lastMessage,
+    newCharacterId,
+    sendMessage
   );
 
   usePingServer(readyState, sendMessage);
@@ -126,6 +131,7 @@ const WebSocketConnection = () => {
               <NewCharacter
                 characterObject={characterObject}
                 sendMessage={sendMessage}
+                setNewCharacterId={setNewCharacterId}
               />
             </div>
           </div>

@@ -6,11 +6,41 @@ import (
 	"log"
 	"math/rand"
 	"server/types"
-	"sync"
 
 	"github.com/gorilla/websocket"
 	_ "github.com/mattn/go-sqlite3"
 )
+
+func CreateCharactersTable(dbName string) error {
+
+	db, err := OpenDatabase(dbName)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	// Drop the table if it exists
+	_, err = db.Exec(`DROP TABLE IF EXISTS characters;`)
+	if err != nil {
+		return fmt.Errorf("error dropping table: %v", err)
+	}
+
+	_, err = db.Exec(`
+	CREATE TABLE IF NOT EXISTS characters (
+		id TEXT PRIMARY KEY,
+		type TEXT,
+		name TEXT,
+		statsHealth INTEGER,
+		statsAttack INTEGER,
+		statsDefense INTEGER
+	)
+	`)
+
+	if err != nil {
+		return fmt.Errorf("error creating table: %v", err)
+	}
+	return nil
+}
 
 func CreateCharacter(dbName string, id string, name string) (*types.CharacterCreationObject, error) {
 	// Open a connection to the SQLite database
@@ -105,35 +135,73 @@ func CreateCharacter(dbName string, id string, name string) (*types.CharacterCre
 	return newCharacterObj, nil
 }
 
-func CreateCharactersTable(dbName string) error {
-
+func DeleteCharacter(dbName string, id string) error {
+	// Open a connection to the SQLite database
 	db, err := OpenDatabase(dbName)
 	if err != nil {
-		return err
+		return fmt.Errorf("error opening database: %v", err)
 	}
 	defer db.Close()
 
-	// Drop the table if it exists
-	_, err = db.Exec(`DROP TABLE IF EXISTS characters;`)
+	// Start a new transaction
+	tx, err := db.Begin()
 	if err != nil {
-		return fmt.Errorf("error dropping table: %v", err)
+		return fmt.Errorf("error starting transaction: %v", err)
 	}
 
-	_, err = db.Exec(`
-	CREATE TABLE IF NOT EXISTS characters (
-		id TEXT PRIMARY KEY,
-		type TEXT,
-		name TEXT,
-		statsHealth INTEGER,
-		statsAttack INTEGER,
-		statsDefense INTEGER
-	)
-	`)
-
+	// Delete character from database
+	_, err = tx.Exec(`
+		DELETE FROM characters WHERE id = ?
+	`, id)
+	log.Println("Deleting character from DB")
 	if err != nil {
-		return fmt.Errorf("error creating table: %v", err)
+		tx.Rollback()
+		return fmt.Errorf("error inserting character: %v", err)
 	}
+
+	// Commit the transaction
+	err = tx.Commit()
+	if err != nil {
+		return fmt.Errorf("error committing transaction: %v", err)
+	}
+
 	return nil
+}
+
+func RemoveFromGrid(dbName string, id string) error {
+	// Open a connection to the SQLite database
+	db, err := OpenDatabase(dbName)
+	if err != nil {
+		return fmt.Errorf("error opening database: %v", err)
+	}
+	defer db.Close()
+
+	// Start a new transaction
+	tx, err := db.Begin()
+	if err != nil {
+		return fmt.Errorf("error starting transaction: %v", err)
+	}
+
+	// Delete character from database
+	_, err = tx.Exec(`
+		UPDATE tiles
+		SET unit = NULL
+		WHERE unit = ?
+	`, id)
+	if err != nil {
+		tx.Rollback()
+		return fmt.Errorf("error inserting character: %v", err)
+	}
+	log.Println("Deleting character from grid")
+
+	// Commit the transaction
+	err = tx.Commit()
+	if err != nil {
+		return fmt.Errorf("error committing transaction: %v", err)
+	}
+
+	return nil
+
 }
 
 func GetPlayerLocation(dbName string, Id string) (types.Location, error) {
@@ -229,7 +297,7 @@ func UpdatePlayerLocation(dbName string, Id string, nextLocation types.Location)
 	return nil
 }
 
-func SyncPlayers(connectedPlayers map[string]*websocket.Conn, mutex *sync.Mutex) {
+func SyncPlayers(connectedPlayers map[string]*websocket.Conn) {
 	// Iterate over the connected players
 	for playerID, conn := range connectedPlayers {
 
@@ -277,15 +345,10 @@ func SyncPlayers(connectedPlayers map[string]*websocket.Conn, mutex *sync.Mutex)
 			log.Printf("Error sending results: %v", err)
 		}
 
-		// Use a mutex to ensure that only one goroutine writes to the WebSocket connection at a time
-		mutex.Lock()
-
 		err = conn.WriteJSON(types.SyncMessage{
 			Type:    "SyncPlayers",
 			Payload: payload,
 		})
-
-		mutex.Unlock()
 
 		if err != nil {
 			log.Printf("No connected players")

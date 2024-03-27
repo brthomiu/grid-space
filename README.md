@@ -1,6 +1,6 @@
 # Grid-Space: A Concurrent Multiplayer Web Application
 
-<img src="gridGifSmall.gif" />
+<video src="wge.mp4"></video>
 <em>Demo of concurrency between two separate clients.</em>
 
 ## Live Demonstration
