@@ -1,41 +1,41 @@
-import axios from "axios";
+// import axios from "axios";
 import { SendMessage } from "react-use-websocket";
 import {
   Location,
   MoveMessage,
   CharacterCreationMessage,
-  GuestLoginMessage,
+  // GuestLoginMessage,
 } from "../types/types";
-import { serverUrl } from "../components/WebSocketConnection";
+// import { serverUrl } from "../components/WebSocketConnection";
 
 // POST request to login as guest
-export async function sendGuestLoginRequest(
-  Name: string,
-  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>,
-): Promise<void> {
-  try {
-    const requestData: GuestLoginMessage = {
-      Type: "GuestLogin",
-      Payload: {
-        Name,
-      },
-    };
+// export async function sendGuestLoginRequest(
+//   Name: string,
+//   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>,
+// ): Promise<void> {
+//   try {
+//     const requestData: GuestLoginMessage = {
+//       Type: "GuestLogin",
+//       Payload: {
+//         Name,
+//       },
+//     };
 
-    // Send the request
-    const response = await axios.post(
-      `http://${serverUrl}/api/guestlogin`,
-      requestData,
-    );
+//     // Send the request
+//     const response = await axios.post(
+//       `http://${serverUrl}/api/guestlogin`,
+//       requestData,
+//     );
 
-    // Handle response
-    if (response.status === 200) {
-      setIsAuthenticated(true);
-    }
-  } catch (error) {
-    // Handle errors
-    console.error("Error:", error);
-  }
-}
+//     // Handle response
+//     if (response.status === 200) {
+//       setIsAuthenticated(true);
+//     }
+//   } catch (error) {
+//     // Handle errors
+//     console.error("Error:", error);
+//   }
+// }
 
 export const playerMapMessage = (playerId: string, location: Location) => {
   const message = {

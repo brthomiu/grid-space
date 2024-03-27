@@ -87,15 +87,24 @@ func processMessage(conn *websocket.Conn, msg types.Message) {
 			return
 		}
 
-		// Get the connection for the intended recipient
-		recipientConn := connectedPlayers[response.Payload.CharacterObject.Id]
-		log.Printf("Recipient connection: %v", recipientConn.RemoteAddr())
-
-		// Send the response to the intended recipient
-		err = recipientConn.WriteJSON(response)
-		if err != nil {
-			log.Printf("Error sending results: %v", err)
+		// Iterate over all connected players and send the response to each one
+		for _, recipientConn := range connectedPlayers {
+			// Send the response to the intended recipient
+			err := recipientConn.WriteJSON(response)
+			if err != nil {
+				log.Printf("Error sending results to %v: %v", recipientConn.RemoteAddr(), err)
+			}
 		}
+
+		// // Get the connection for the intended recipient
+		// recipientConn := connectedPlayers[response.Payload.CharacterObject.Id]
+		// log.Printf("Recipient connection: %v", recipientConn.RemoteAddr())
+
+		// // Send the response to the intended recipient
+		// err = recipientConn.WriteJSON(response)
+		// if err != nil {
+		// 	log.Printf("Error sending results: %v", err)
+		// }
 
 	case "ping": // Empty case to ignore ping messages
 

@@ -5,7 +5,7 @@ import Navbar from "./components/ui/Navbar";
 
 function App() {
   // Auth state to determine if player is shown login screen
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   // Ref for tilt effect on main div
   const tiltRef = useRef(null);

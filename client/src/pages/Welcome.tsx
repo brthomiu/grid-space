@@ -1,5 +1,5 @@
 // import { useState } from "react";
-import { sendGuestLoginRequest } from "../api/api";
+// import { sendGuestLoginRequest } from "../api/api";
 
 type Props = {
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
@@ -33,18 +33,14 @@ const Welcome = (props: Props) => {
   const loginAsGuest = (
     setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>,
   ) => {
-
-      const guestId = Date.now().toString()
-      sendGuestLoginRequest(guestId, setIsAuthenticated);
-    }
-
-
+    setIsAuthenticated(true);
+  };
 
   return (
-    <div className="rounded-2xl lg:mt-16 border-2 border-lime-300 border-opacity-80 bg-black bg-opacity-75 p-8">
+    <div className="rounded-2xl border-2 border-lime-300 border-opacity-80 bg-black bg-opacity-75 p-8 lg:mt-16">
       <h2 className="font-bold text-lime-300">WELCOME TO GRID-SPACE</h2>
       <div className="flex w-56 flex-col gap-4 text-black">
-?
+        ?
         {/* <input
           className="rounded border-2 border-lime-300 bg-indigo-600 p-1 text-black"
           maxLength={16}
