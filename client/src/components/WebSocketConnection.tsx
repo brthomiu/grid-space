@@ -11,11 +11,11 @@ import LeftBar from "./ui/LeftBar";
 import RightBar from "./ui/RightBar";
 import RotateCube from "./ui/RotateCube";
 
-export const serverUrl = "localhost:8080";
-const socketUrl = `ws://${serverUrl}/ws`;
+// export const serverUrl = "localhost:8080";
+// const socketUrl = `ws://${serverUrl}/ws`;
 
-// const socketUrl = `wss://${serverUrl}/ws`;
-// export const serverUrl = "grid-server-live-d5aba022ae2f.herokuapp.com";
+export const serverUrl = "grid-server-live-d5aba022ae2f.herokuapp.com";
+const socketUrl = `wss://${serverUrl}/ws`;
 
 const WebSocketConnection = () => {
   // Server URL - Change from localhost to heroku before deploying
